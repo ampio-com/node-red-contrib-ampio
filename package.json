@@ -1,0 +1,22 @@
+{
+  "name": "red-contrib-ampio",
+  "version": "0.0.1",
+  "description": "Ampio node",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ampio"
+  ],
+  "node-red": {
+    "nodes": {
+      "ampioin": "ampioin/in.js",
+      "ampioout": "ampioin/out.js"
+    }
+  },
+  "author": "Ampio Sp. z o.o.",
+  "license": "ISC",
+  "dependencies": {
+    "left-pad": "^1.3.0"
+  }
+}
