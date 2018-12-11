@@ -4,11 +4,6 @@
         color: '#d4d9db',
         defaults: {
             valtype: {value:"s"},
-            lcdfont: {value:"07"},
-            lcdxpos: {value:"0"},
-            lcdypos: {value:"0"},
-            lcdcharcolor: {value:"#000000"},
-            lcdbackcolor: {value:"#FFFFFF"},
             mac: {value:""},
             ioid: {value:""},
             name: {value:""}
@@ -28,34 +23,7 @@
         <select type="text" id="node-input-valtype" style="width: 70%;">
             <option value="s" selected>Standard</option>
             <option value="r">Raw CAN broadcast</option>
-            <option value="lcd">LCD string show</option>
         </select>
-    </div>
-    <div id="LCDoptions" style="display: none;">
-        <div class="form-row">
-            <label for="node-input-lcdfont"><i class="icon-tag"></i> LCD font size</label>
-            <select type="text" id="node-input-lcdfont" style="width: 70%;">
-                <option value="07" selected>Standard (10x16)</option>
-                <option value="09">Big (20x32)</option>
-                <option value="0A">Icon (40x40)</option>
-            </select>
-        </div>
-        <div class="form-row">
-            <label for="node-input-lcdxpos"><i class="icon-tag"></i> LCD X position</label>
-            <input type="text" id="node-input-lcdxpos" placeholder="ex. 12">
-        </div>
-        <div class="form-row">
-            <label for="node-input-lcdypos"><i class="icon-tag"></i> LCD Y position</label>
-            <input type="text" id="node-input-lcdypos" placeholder="ex. 14">
-        </div>
-        <div class="form-row">
-            <label for="node-input-lcdcharcolor"><i class="icon-tag"></i> LCD text color (hex)</label>
-            #<input type="text" id="node-input-lcdcharcolor" placeholder="ex. #ff12bb">
-        </div>
-        <div class="form-row">
-            <label for="node-input-lcdbackcolor"><i class="icon-tag"></i> LCD bg color (hex)</label>
-            #<input type="text" id="node-input-lcdbackcolor" placeholder="ex. #ff12bb">
-        </div>
     </div>
     <div class="form-row">
         <label for="node-input-mac"><i class="icon-tag"></i> MAC</label>
@@ -73,16 +41,10 @@
     <script type="text/javascript">
         $("#node-input-valtype").change(function(){
             var e = document.getElementById("node-input-valtype");
-            if(e.options[e.selectedIndex].value=="lcd"){
-                document.getElementById("LCDoptions").style.display = "block";
-                document.getElementById("ioid").style.display = "none";
-            }
-            else if(e.options[e.selectedIndex].value=="s"){
+            if(e.options[e.selectedIndex].value=="s"){
                 document.getElementById("ioid").style.display = "block";
-                document.getElementById("LCDoptions").style.display = "none";
             }
             else{
-                document.getElementById("LCDoptions").style.display = "none";
                 document.getElementById("ioid").style.display = "none";
             }
         })
