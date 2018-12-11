@@ -12,7 +12,7 @@
     "nodes": {
       "ampioin": "ampioin/in.js",
       "ampioout": "ampioin/out.js",
-      "ampiolcd": "ampioin/lcd.js",
+      "ampiolcd": "ampioin/lcd.js"
     }
   },
   "author": "Ampio Sp. z o.o.",
