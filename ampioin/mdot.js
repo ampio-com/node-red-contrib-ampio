@@ -1,20 +1,15 @@
 module.exports = function(RED) {
-    function ampiolcd(config) {
+    function ampiomdot(config) {
         
         RED.nodes.createNode(this,config);
         var context = this.context();
         var node = this;
         this.mac = config.mac;
-        this.lcdfont = config.lcdfont;
-        this.lcdxpos = config.lcdxpos;
-        this.lcdypos = config.lcdypos;
-        this.lcdcharcolor = config.lcdcharcolor;
-        this.lcdbackcolor = config.lcdbackcolor;
-        this.srvaddress = config.srvaddress;
+        
 
         var mqtt = require('mqtt');
         const leftPad = require('left-pad');
-        var client  = mqtt.connect('mqtt://'+node.srvaddress);
+        var client  = mqtt.connect('mqtt://192.168.77.80');
 
         var m=false;
 
@@ -106,7 +101,9 @@ module.exports = function(RED) {
                 }
             }
             else if(msg.payload.hasOwnProperty('square')){
-                outstr = outstr + "04" + leftPad(msg.payload.square.x1.toString(16),2,'0') + leftPad(msg.payload.square.y1.toString(16),2,'0') + leftPad(msg.payload.square.x2.toString(16),2,'0') + leftPad(msg.payload.square.y2.toString(16),2,'0') + hex2rgb565(msg.payload.square.col).toUpperCase();
+                let x2 = parseInt(node.lcdxpos)+parseInt(msg.payload.square.x);
+                let y2 = parseInt(node.lcdypos)+parseInt(msg.payload.square.y);
+                outstr = outstr + "04" + xpos + ypos + leftPad(x2.toString(16),2,'0') + leftPad(y2.toString(16),2,'0') + crgb565;
             }
             else if(typeof msg.payload === ('string' || 'number')){
                 cmdtype=node.lcdfont;
@@ -133,7 +130,7 @@ module.exports = function(RED) {
         });
 
     }
-    RED.nodes.registerType("Ampio LCD",ampiolcd);
+    RED.nodes.registerType("Ampio MDOT",ampiomdot);
 };
 
 

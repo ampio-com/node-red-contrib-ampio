@@ -1,0 +1,70 @@
+<script type="text/javascript">
+    RED.nodes.registerType('Ampio MDOT',{
+        category: 'Ampio',
+        color: '#d4d9db',
+        defaults: {
+            lcdfont: {value:"07"},
+            lcdxpos: {value:"0"},
+            lcdypos: {value:"0"},
+            lcdcharcolor: {value:"000000"},
+            lcdbackcolor: {value:"FFFFFF"},
+            mac: {value:""},
+            name: {value:""}
+        },
+        inputs:1,
+        outputs:0,
+        icon: "face.png",
+        align: "right",
+        label: function() {
+            return this.name||"Ampio MDOT";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="Ampio MDOT">
+    <div class="form-row">
+        <label for="node-input-lcdfont"><i class="icon-tag"></i> LCD font size</label>
+        <select type="text" id="node-input-lcdfont" style="width: 70%;">
+            <option value="07" selected>Standard (10x16)</option>
+            <option value="09">Big (20x32)</option>
+            <option value="0A">Icon (40x40)</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-lcdxpos"><i class="icon-tag"></i> LCD X position</label>
+        <input type="text" id="node-input-lcdxpos" placeholder="ex. 12">
+    </div>
+    <div class="form-row">
+        <label for="node-input-lcdypos"><i class="icon-tag"></i> LCD Y position</label>
+        <input type="text" id="node-input-lcdypos" placeholder="ex. 14">
+    </div>
+    <div class="form-row">
+        <label for="node-input-lcdcharcolor"><i class="icon-tag"></i> LCD text color (hex)</label>
+        <input type="text" id="node-input-lcdcharcolor" placeholder="ex. #ff12bb">
+    </div>
+    <div class="form-row">
+        <label for="node-input-lcdbackcolor"><i class="icon-tag"></i> LCD bg color (hex)</label>
+        <input type="text" id="node-input-lcdbackcolor" placeholder="ex. #ff12bb">
+    </div>
+    <div class="form-row">
+        <label for="node-input-mac"><i class="icon-tag"></i> MAC</label>
+        <input type="text" id="node-input-mac" placeholder="ex. 12d3">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+ 
+<script type="text/x-red" data-help-name="Ampio MDOT">
+    <p>Ampio node to send Ampio Smart Home messages to device with specified mac address and specified out-/in-/put.<br/>
+        <h3>Cmd type (required)</h3>
+        Used to define type of command<br>
+        -   RAW commands are explained in Ampio MQTT documentation. Recommended only for advanced users. In this help only standard commands will be explained.<br>
+        -   Standard commands are recommended for all users and for most applications. Payload for standard command is delivered by single string value, which can be number to define analog value, ON or OFF to define binary state (also in analog devices - OFF means 0, and ON means maximum value) or color in R,G,B (ex. "123,233,98").<br>
+        <h3>MAC (required)</h3>
+        Here you have to write MAC address of Ampio CAN device.
+        <h3>I/O ID (required for Standard command)</h3>
+        You have to fill it in only if you selected "Standard" Cmd type. It defines number of output on Ampio module.  
+    </p>
+</script>

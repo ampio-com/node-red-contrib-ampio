@@ -1,0 +1,22 @@
+
+    {
+        "o": "Digital output",
+        "a": "Analog value",
+        "re": "Digital in (rising edge)",
+        "rgbw": "RGB color",
+        "i": "Digital input",
+        "f": "Flag",
+        "t": "Temperature",
+        "hum": "Humidity [%]",
+        "absp": "Atmospheric pressure (absolute) [hPa]",
+        "relp": "Atmospheric pressure (relative) [hPa]",
+        "db": "Loudness [dB]",
+        "lux": "Brightness [lux]",
+        "iaq": "Indoor Air Quality index [IAQ]",
+        "rs": "Heating/Cooling zone set temperature",
+        "temp": "Temperature [*C]",
+        "au": "Analog 8bit value",
+        "au16": "Analog 16 bit value",
+        "au32": "Analog 32 bit value"
+    }
+

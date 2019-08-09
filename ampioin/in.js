@@ -7,21 +7,27 @@ module.exports = function(RED) {
         this.mac = config.mac;
         this.ioid = config.ioid;
         this.valtype = config.valtype;
+        this.retainignore = config.retainignore;
+        this.srvaddress = config.srvaddress;
         var mqtt = require('mqtt');
-        var client  = mqtt.connect('mqtt://192.168.77.80');
+        var client  = mqtt.connect('mqtt://'+node.srvaddress);
         var n=false;
         var m=false;
 
         var mac = node.mac;
         var ioid = node.ioid;
         var valtype = node.valtype;
-
-        
+        var retainignore = node.retainignore
+        var JustConnected;
+        var RisingEdgeDetection=false;
+        if (valtype == "re"){
+            valtype = "i";
+            RisingEdgeDetection = true;
+        }
 
         mac = mac.toUpperCase();
         node.status({fill:"yellow",shape:"dot",text:"not connected"});
 
-        //ODKOMENTUJ JAK OLEK ZAKTUALIZUJE API
         while(m==false){
             if(mac[0]=='0'){
                 mac = mac.substring(1);
@@ -30,8 +36,6 @@ module.exports = function(RED) {
                 m=true;
             }
         }
-        
-
 
         while(n==false){
             if(ioid[0]=='0'){
@@ -42,16 +46,64 @@ module.exports = function(RED) {
             }
         }
 
-
         client.on('connect', function () {
-          client.subscribe('ampio/from/'+mac+'/state/'+valtype+'/'+ioid, function (err) { //topic to subscribe
-            if (!err && mac!="" && ioid!="" && valtype!="") {
-                node.status({fill:"green",shape:"dot",text:"connected"});
+            switch(valtype){
+                case 'hum':
+                valtype = 'au16l';
+                ioid = '1';
+                break;
+                case 'absp':
+                valtype = 'au16l';
+                ioid = '2';
+                break;
+                case 'relp':
+                valtype = 'au16l';
+                ioid = '6'
+                break;
+                case 'db':
+                valtype = 'au16l';
+                ioid = '3';
+                break;
+                case 'lux':
+                valtype = 'au16l';
+                ioid = '4';
+                break;
+                case 'iaq':
+                valtype = 'au16l';
+                ioid = '5';
+                break;
+                case 'temp':
+                valtype = 't';
+                ioid = '1';
+                break;
+                default:
+                ;
             }
-            else{
-                node.status({fill:"red",shape:"ring",text:"fill properties"});
+            // wilg, cis b, glos, jasn, iaq, cisn wz
+
+            //hum: 'Humidity [%]',
+            //absp: 'Atmospheric pressure (absolute) [hPa]',
+            //relp: 'Atmospheric pressure (relative) [hPa]',
+            //db: 'Loudness [dB]',
+            //lux: 'Brightness [lux]',
+            //iaq: 'Indoor Air Quality index [IAQ]',
+
+            if(valtype!='raw'){
+                var SubPath = 'ampio/from/'+mac+'/state/'+valtype+'/'+ioid;
             }
-          })
+            else if(valtype=='raw'){
+                var SubPath = 'ampio/from/'+mac+'/raw'
+            }
+            client.subscribe(SubPath, function (err) { //topic to subscribe
+                if (!err && mac!="" && ioid!="" && valtype!="") {
+                    node.status({fill:"green",shape:"dot",text:"connected"});
+                    JustConnected=true;
+                }
+                else{
+                    node.status({fill:"red",shape:"ring",text:"fill properties"});
+                }
+            })
+            
         })
 
         client.on('error', function () {
@@ -75,9 +127,27 @@ module.exports = function(RED) {
         })
 
         client.on('message', function (topic, message) {
-            // message is Buffer
-            var outMsg = {payload: Number(message.toString('utf-8'))};
-            node.send(outMsg);
+
+            if(RisingEdgeDetection==true){
+                if(message == 1){
+                    var outMsg = {payload: message.toString('utf-8')};
+                    node.send(outMsg);
+                }
+            }
+            else{
+                if(JustConnected==true && retainignore==true){
+                    JustConnected=false;
+                }
+                else if(JustConnected==true && retainignore==false){
+                    JustConnected=false;
+                    var outMsg = {payload: message.toString('utf-8')};
+                    node.send(outMsg);
+                }
+                else{
+                    var outMsg = {payload: message.toString('utf-8')};
+                    node.send(outMsg);
+                }
+            }
         })
 
         this.on('close', function() {

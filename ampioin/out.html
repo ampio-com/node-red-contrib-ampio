@@ -6,28 +6,116 @@
             valtype: {value:"s"},
             mac: {value:""},
             ioid: {value:""},
-            name: {value:""}
+            name: {value:""},
+            srvaddress: {value:"localhost"}
         },
         inputs:1,
         outputs:0,
         icon: "face.png",
+        align: "right",
         label: function() {
             return this.name||"Ampio OUT";
+        },
+        oneditprepare: function(){
+            var node = this;
+            var DevTypes;
+            var VisDevices={};
+            var ValTypes;
+            $.getJSON('ampio/devices/types',function(json){
+                DevTypes = json;
+            });
+            $.getJSON('ampio/outvaluetypes',function(json){
+                ValTypes = json;
+            });
+            function pad (str, max) {
+                str = str.toString();
+                return str.length < max ? pad("0" + str, max) : str;
+            }
+            function GetDevices(){
+                var ip = $('#node-input-srvaddress').val();
+                $("#node-input-mac").empty();
+                $.getJSON('ampio/devices/list/'+ip, function(data) {
+                        $('#node-input-mac').prop('disabled', false);
+                        for (var i = 0; i< data.length; i++){
+                            let dev = data[i];
+                            $("<option value='" + dev.user_mac + "'> " + pad(dev.user_mac,4) + " - " + (DevTypes[dev.typ].type) + " (" + atob(dev.name) + ")</option>").appendTo('#node-input-mac');
+                            let tempObj={};
+                            tempObj.type = dev.typ;
+                            tempObj.name = atob(dev.name);
+                            tempObj.soft = dev.soft_ver;
+                            VisDevices[dev.user_mac] = tempObj;
+                        }
+                        let dev = data[0];
+                        $("#node-input-mac").val(dev.user_mac);
+                        $('#node-input-mac').trigger('change');
+                        if(node.mac != "" && VisDevices.hasOwnProperty(node.mac)){
+                            $("#node-input-mac").val(node.mac);
+                            $('#node-input-mac').trigger('change');
+                        }
+                    
+                })
+                .fail(function() {
+                    $('#node-input-mac').prop('disabled', 'disabled');
+                    $("<option value='" + "error" + "'> " + "Error loading devices!" + "</option>").appendTo('#node-input-mac');
+                });
+            }
+
+
+            GetDevices();
+            $("#node-input-lookup-devices").on("click",function(){
+                GetDevices();
+            });
+
+            $("#node-input-mac").on('change', function(){
+                $("#node-input-valtype").empty();
+                let mac = $('#node-input-mac').val()
+                if(VisDevices.hasOwnProperty(mac)){
+                    if(DevTypes[VisDevices[mac].type].hasOwnProperty('outoptions')){
+                        let outoptions = DevTypes[VisDevices[mac].type].outoptions;
+                        let NodeValtypeExists = false;
+                        for(let i = 0; i < outoptions.length; i++){
+                            $("<option value='" + outoptions[i] + "'>" + ValTypes[outoptions[i]] + "</option>").appendTo('#node-input-valtype');
+                            if(node.valtype === outoptions[i]){
+                                NodeValtypeExists = true;
+                            }
+                        }
+
+                        if(node.valtype != '' && NodeValtypeExists){
+                            $("#node-input-valtype").val(node.valtype);
+                            $('#node-input-valtype').trigger('change');
+                        }
+                    }
+                }
+                
+            });
+
         }
     });
 </script>
 
 <script type="text/x-red" data-template-name="Ampio OUT">
     <div class="form-row">
+        <label for="node-input-srvaddress"><i class="icon-tag"></i> Server address</label>
+        <input type="text" id="node-input-srvaddress" placeholder="localhost">
+    </div>
+    <div class="form-row">
+        <label for="node-input-mac"><i class="icon-tag"></i> Target device</label>
+        <div style="display: inline-block; position: relative; width: 70%; height: 20px;">
+            <div style="position: absolute; left: 0px; right: 40px;">
+                <select id="node-input-mac" style="width: 100%;"></select>
+            </div>
+            <a id="node-input-lookup-devices" class="editor-button" style="position: absolute; right: 0px; top: 0px;">
+                <i class="fa fa-search"></i>
+            </a>
+        </div>
+    </div>
+    <div class="form-row">
         <label for="node-input-valtype"><i class="icon-tag"></i> Cmd type</label>
         <select type="text" id="node-input-valtype" style="width: 70%;">
             <option value="s" selected>Standard</option>
             <option value="r">Raw CAN broadcast</option>
+            <option value="f">Flag</option>
         </select>
-    </div>
-    <div class="form-row">
-        <label for="node-input-mac"><i class="icon-tag"></i> MAC</label>
-        <input type="text" id="node-input-mac" placeholder="ex. 12d3">
     </div>
     <div class="form-row" style="display: none;" id="ioid">
         <label for="node-input-ioid"><i class="icon-tag"></i> I/O ID</label>
@@ -37,11 +125,12 @@
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
+    
 
     <script type="text/javascript">
         $("#node-input-valtype").change(function(){
             var e = document.getElementById("node-input-valtype");
-            if(e.options[e.selectedIndex].value=="s"){
+            if(e.options[e.selectedIndex].value=="s" || e.options[e.selectedIndex].value=="f"){
                 document.getElementById("ioid").style.display = "block";
             }
             else{
@@ -50,16 +139,33 @@
         })
     </script>
 </script>
- 
+
 <script type="text/x-red" data-help-name="Ampio OUT">
     <p>Ampio node to send Ampio Smart Home messages to device with specified mac address and specified out-/in-/put.<br/>
-        <h3>Cmd type (required)</h3>
-        Used to define type of command<br>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+    <dt>payload
+    <span class="property-type">string | number</span>
+    </dt>
+    <dd> For ON/OFF devices such as relays/flags, <code>0</code> will turn off the output, and any value from <code>1</code> to <code>255</code> will turn it on. Analog outputs like dimmers will react to any value from <code>0</code> (minimum) to <code>255</code> (maximum). <code>ON</code> or <code>OFF</code> in payload will also work. </dd>
+    </dl>
+    <h3>Details</h3>
+    <h4>Server address (required)</h3>
+    In most cases, leave it with default <code>localhost</code> address.<br>
+    Enter local IP address of your Ampio Smart Home MSERV-3s module. If you're running node-red on MSERV, enter localhost. <br>
+    <h4>Target Device (required)</h4>
+    After enetring valid server address, click search icon. List of Ampio devices in CAN network should be visible. Select device, which you want to use.
+        <h4>Cmd type (required)</h4>
+        Used to define type of command<br><br>
         -   RAW commands are explained in Ampio MQTT documentation. Recommended only for advanced users. In this help only standard commands will be explained.<br>
-        -   Standard commands are recommended for all users and for most applications. Payload for standard command is delivered by single string value, which can be number to define analog value, ON or OFF to define binary state (also in analog devices - OFF means 0, and ON means maximum value) or color in R,G,B (ex. "123,233,98").<br>
-        <h3>MAC (required)</h3>
-        Here you have to write MAC address of Ampio CAN device.
-        <h3>I/O ID (required for Standard command)</h3>
-        You have to fill it in only if you selected "Standard" Cmd type. It defines number of output on Ampio module.  
+        -   Standard commands are recommended for all users and for most applications. Payload for standard command is delivered by single string value, which can be number to define analog value, <code>ON</code> or <code>OFF</code> to define binary state (also in analog devices - <code>OFF</code> means <code>0</code>, and <code>ON</code> means maximum value) or color in R,G,B (ex. <code>123,233,98</code>).<br>
+        <h4>I/O ID (required for Standard command)</h4>
+        You have to fill it in only if you selected "Standard" Cmd type. It defines number of output on Ampio module.
+        <h4>MRT devices</h4>
+        For MRT family, you can choose:<br>
+        -   MRT set temperature - in payload, you should provide only temperature, that you want to set for zone with number defined in node configuration on the left. Example: <code>19</code> - it will set zone for 19 Celsius degrees.<br><br>
+        -   Heat/cooling set day/night temperature - in payload, you should provide <code>day_temperature,temperature_night</code>, example: <code>19,20</code><br><br>
+        -   Heating/cooling zone set mode - in payload, you should put: <code>0</code> for calendar, <code>1</code> for manual mode, <code>2</code> for manual2 mode, <code>3</code> for holiday mode or <code>4</code> to lock the zone.
+        
     </p>
 </script>

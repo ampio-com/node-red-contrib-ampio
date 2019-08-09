@@ -1,0 +1,58 @@
+<script type="text/javascript">
+    RED.nodes.registerType('Ampio Events',{
+        category: 'Ampio',
+        color: '#d4d9db',
+        defaults: {
+            name: {value:""},
+            srvaddress: {value:"localhost"}
+        },
+        inputs:1,
+        outputs:1,
+        icon: "face.png",
+        align: "right",
+        label: function() {
+            return this.name||"Ampio Events";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="Ampio Events">
+    <div class="form-row">
+        <label for="node-input-srvaddress"><i class="icon-tag"></i> Server address</label>
+        <input type="text" id="node-input-srvaddress" placeholder="localhost">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    </script>
+</script>
+ 
+<script type="text/x-red" data-help-name="Ampio Events">
+    <p>Ampio node used to send and receive Events in Ampio Smart Home CAN network.<br/>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+    <dt>payload
+    <span class="property-type">string | number</span>
+    </dt>
+    <dd> number of event, you want to announce in CAN Network </dd>
+    </dl>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+    <dt>payload
+    <span class="property-type">string</span>
+    </dt>
+    <dd> number of event, that is annopunced in CAN Network. </dd>
+    </dl>
+    
+    <h3>Details</h3>
+    If you want to send event to CAN Network, send event number in <code>msg.payload</code>, connected to input of this node. Example: <code>43</code>.<br><br>
+    Every time when an event from CAN Network is being sent by any other device (touch panel, any module, or from HTTP API), this block will send event number in <code>msg.payload</code> on output.
+        <h4>Server address (required)</h4>
+        Enter local IP address of your Ampio Smart Home MSERV-3s module.
+        <h4>Name (not required)</h4>
+        Enter here name of node block. It's not necessary.
+        
+        
+    </p>
+</script>

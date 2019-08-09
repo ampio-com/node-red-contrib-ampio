@@ -1,0 +1,92 @@
+<script type="text/javascript">
+    RED.nodes.registerType('Ampio MULTISENS',{
+        category: 'Ampio',
+        color: '#d4d9db',
+        defaults: {
+            valtype: {value:""},
+            mac: {value:""},
+            name: {value:""},
+            srvaddress: {value:"localhost"}
+        },
+        inputs:0,
+        outputs:1,
+        icon: "face.png",
+        label: function() {
+            return this.name||"Ampio MULTISENS";
+        },
+        oneditprepare: function(){
+            var node = this;
+            var DevTypes;
+            $.getJSON('ampio/devices/types',function(json){
+                DevTypes = json;
+            });
+            function pad (str, max) {
+                str = str.toString();
+                return str.length < max ? pad("0" + str, max) : str;
+            }
+            function GetDevices(){
+                var ip = $('#node-input-srvaddress').val();
+                $("#node-input-mac").empty();
+                var valtype = $('#node-input-valtype').val();
+                $.getJSON('ampio/devices/list/'+ip, function(data) {
+                        for (var i = 0; i< data.length; i++){
+                            var dev = data[i];
+                            if(dev.typ == 44){
+                                $("<option value='" + dev.user_mac + "'> " + pad(dev.user_mac,4) + " - " + (DevTypes[dev.typ].type) + " (" + atob(dev.name) + ")</option>").appendTo('#node-input-mac');
+                            }
+                        }
+                        if(node.mac != ""){
+                            $("#node-input-mac").val(node.mac);
+                            $('#node-input-mac').trigger('change');
+                        }
+                    
+                });
+            }
+            GetDevices();
+            $("#node-input-lookup-devices").on("click",function(){
+                GetDevices();
+            });
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="Ampio MULTISENS">
+    <div class="form-row">
+        <label for="node-input-valtype"><i class="icon-tag"></i> Value Type</label>
+        <select type="text" id="node-input-valtype" placeholder="Value">
+            <option value="a/201">Humidity [%]</option>
+            <option value="a/202">Atmospheric pressure (absolute) [hPa]</option>
+            <option value="a/203">Loudness [dB]</option>
+            <option value="a/204">Brightness [%]</option>
+            <option value="a/205">Indoor Air Quality [IAQ]</option>
+            <option value="a/206">Atmospheric pressure (relative) [hPa]</option>
+            <option value="t/1">Temperature [*C]</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="node-input-srvaddress"><i class="icon-tag"></i> Server address</label>
+        <input type="text" id="node-input-srvaddress">    
+        </input>
+    </div>
+    <div class="form-row">
+        <label for="node-input-mac"><i class="icon-tag"></i> Target device</label>
+        <div style="display: inline-block; position: relative; width: 70%; height: 20px;">
+            <div style="position: absolute; left: 0px; right: 40px;">
+                <select id="node-input-mac" style="width: 100%;"></select>
+            </div>
+            <a id="node-input-lookup-devices" class="editor-button" style="position: absolute; right: 0px; top: 0px;">
+                <i class="fa fa-search"></i>
+            </a>
+        </div>
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    
+</script>
+
+<script type="text/x-red" data-help-name="Ampio MULTISENS">
+    <p>Ampio node to receive Ampio Smart Home messages from device with specified mac address and specified output.<br/>
+    </p>
+</script>

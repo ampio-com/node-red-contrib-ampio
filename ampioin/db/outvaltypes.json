@@ -1,0 +1,10 @@
+
+    {
+        "s": "Standard",
+        "r": "Raw CAN broadcast",
+        "f": "Flag",
+        "rs": "MRT set temperature",
+        "rsdn": "Heat/cooling set day/night temperature",
+        "rm": "Heating/cooling zone set mode"
+    }
+
