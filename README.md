@@ -1,4 +1,4 @@
-## Ampio module
+## Ampio Node-RED module
 Ampio add-on made to use Ampio Smart Home devices in Node-RED.
 
 ## Pre-requisites
