@@ -17,6 +17,6 @@ Basically, after installing you will have 4 add-ons:
 - Ampio Events, to send and/or receive events from your CAN Network. 
 
 ## Changelog
-0.2.2 - corrected the bug - MRT heating/cooling functions were not working, now it's OK; added IR codes sending from MSENS module; updated help files with latest functionalities
+0.2.2 - corrected the bug - MRT heating/cooling functions were not working, now it's OK; added IR codes sending from MSENS module; updated help files with latest functionalities<br>
 0.2.1 - added au8, au16, au32 values for MCON devices. Moved values descriptions to external database. Modified and updated help files. Created readme file and updated package.json to fit node-red requirements.<br>
 0.2.0 - general update, adding auto discovery for modules and auto-discovery for functions of modules
