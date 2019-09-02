@@ -115,6 +115,10 @@
             <option value="s" selected>Standard</option>
             <option value="r">Raw CAN broadcast</option>
             <option value="f">Flag</option>
+            <option value="ir">send IR code from MSENS memory</option>
+            <option value="rs">MRT set temperature</option>
+            <option value="rsdn">Heat/cooling set day/night temperature</option>
+            <option value="rm">Heating/cooling zone set mode</option>
         </select>
     </div>
     <div class="form-row" style="display: none;" id="ioid">
@@ -130,7 +134,7 @@
     <script type="text/javascript">
         $("#node-input-valtype").change(function(){
             var e = document.getElementById("node-input-valtype");
-            if(e.options[e.selectedIndex].value=="s" || e.options[e.selectedIndex].value=="f"){
+            if(e.options[e.selectedIndex].value!="r"){
                 document.getElementById("ioid").style.display = "block";
             }
             else{
@@ -148,6 +152,18 @@
     <span class="property-type">string | number</span>
     </dt>
     <dd> For ON/OFF devices such as relays/flags, <code>0</code> will turn off the output, and any value from <code>1</code> to <code>255</code> will turn it on. Analog outputs like dimmers will react to any value from <code>0</code> (minimum) to <code>255</code> (maximum). <code>ON</code> or <code>OFF</code> in payload will also work. </dd>
+    <dt>mac
+    <span class="property-type">string</span>
+    </dt>
+    <dd> <b>Optional</b> You can send in <code>msg.mac</code> MAC address of the device, you want to control. It will override MAC adress of the device, which you have chosen in Node configuration. MAC address should be entered without leading zeros (ex. if you have MSERV with MAC <code>0001</code>, you should enter only <code>1</code>.) </dd>
+    <dt>ioid
+    <span class="property-type">string | number</span>
+    </dt>
+    <dd> <b>Optional</b> You can enter here (<code>msg.valtype</code>) output ID number (relay, flag, etc.) which you would like to control. It will override I/O ID entered in Node configuration. I/O ID should be entered without leading zeros. </dd>
+    <dt>valtype
+    <span class="property-type">string</span>
+    </dt>
+    <dd> <b>Optional</b> You can enter here (<code>msg.valtype</code>) value type, you would like to provide. It can be <code>r</code> for RAW value, <code>s</code> for standard output, <code>f</code> for controlling flags, or <code>ir</code> for sending IR commands from MSENS. </dd>
     </dl>
     <h3>Details</h3>
     <h4>Server address (required)</h3>
@@ -166,6 +182,7 @@
         -   MRT set temperature - in payload, you should provide only temperature, that you want to set for zone with number defined in node configuration on the left. Example: <code>19</code> - it will set zone for 19 Celsius degrees.<br><br>
         -   Heat/cooling set day/night temperature - in payload, you should provide <code>day_temperature,temperature_night</code>, example: <code>19,20</code><br><br>
         -   Heating/cooling zone set mode - in payload, you should put: <code>0</code> for calendar, <code>1</code> for manual mode, <code>2</code> for manual2 mode, <code>3</code> for holiday mode or <code>4</code> to lock the zone.
-        
+        <h4>MSENS IR sending</h4>
+        You can send IR commands from Ampio Multisens (MSENS2) module. As a value, you should choose "IR code from MSENS memory". In I/O ID field you have to enter ID of saved IR code. This code should be saved in memory using Ampio CAN configurator software. To send this code, just send anything to module input. It can be even timestamp.
     </p>
 </script>

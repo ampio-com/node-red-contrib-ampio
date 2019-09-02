@@ -63,17 +63,42 @@ module.exports = function(RED) {
         })
 
         this.on("input", function(msg) {
-            if(valtype=='r'){
-                client.publish('ampio/to/'+mac+'/raw',msg.payload.toString());
+            if(msg.hasOwnProperty('valtype')){
+                var valtype2=msg.valtype;
             }
-            else if(valtype=='s'){
-                client.publish('ampio/to/'+mac+'/o/'+ioid+'/cmd',msg.payload);
+            else{
+                var valtype2=valtype;
             }
-            else if(valtype=='f'){
-                var outMsg = '0101' + leftPad((Number(ioid)-1).toString(16),2,'0') + leftPad(Number(msg.payload).toString(16),2,'0');
-                client.publish('ampio/to/'+mac+'/raw',outMsg)
+            if(msg.hasOwnProperty('mac')){
+                var mac2=msg.mac;
             }
-
+            else{
+                var mac2=mac;
+            }
+            if(msg.hasOwnProperty('ioid')){
+                var ioid2=msg.ioid;
+            }
+            else{
+                var ioid2=ioid;
+            }
+            if(valtype2=='r'){
+                client.publish('ampio/to/'+mac2+'/raw',msg.payload.toString());
+            }
+            else if(valtype2=='s' || valtype2=='rs' || valtype2=='rsdn' || valtype2=='rm'){
+                client.publish('ampio/to/'+mac2+'/' + valtype2 + '/'+ioid2+'/cmd',msg.payload);
+            }
+            else if(valtype2=='f'){
+                var outMsg = '0101' + leftPad((Number(ioid2)-1).toString(16),2,'0') + leftPad(Number(msg.payload).toString(16),2,'0');
+                client.publish('ampio/to/'+mac2+'/raw',outMsg);
+            }
+            else if(valtype2=='ir'){
+                var outMsg = '8206' + leftPad((Number(ioid2)-1).toString(16),2,'0');
+                client.publish('ampio/to/'+mac2+'/raw',outMsg);
+            }
+            else{
+                client.publish('ampio/to/'+mac2+'/'+valtype2+'/'+ioid2+'/cmd',msg.payload);
+            }
+                
         })
 
         this.on('close', function() {

@@ -5,6 +5,7 @@
         "f": "Flag",
         "rs": "MRT set temperature",
         "rsdn": "Heat/cooling set day/night temperature",
-        "rm": "Heating/cooling zone set mode"
+        "rm": "Heating/cooling zone set mode",
+        "ir": "IR code from MSENS memory"
     }
 
