@@ -84,7 +84,10 @@ module.exports = function(RED) {
             if(valtype2=='r'){
                 client.publish('ampio/to/'+mac2+'/raw',msg.payload.toString());
             }
-            else if(valtype2=='s' || valtype2=='rs' || valtype2=='rsdn' || valtype2=='rm'){
+            else if(valtype2=='s'){
+                client.publish('ampio/to/'+mac2+'/o/'+ioid2+'/cmd',msg.payload);
+            }
+            else if(valtype2=='rs' || valtype2=='rsdn' || valtype2=='rm'){
                 client.publish('ampio/to/'+mac2+'/' + valtype2 + '/'+ioid2+'/cmd',msg.payload);
             }
             else if(valtype2=='f'){
