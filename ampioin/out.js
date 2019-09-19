@@ -87,12 +87,8 @@ module.exports = function(RED) {
             else if(valtype2=='s'){
                 client.publish('ampio/to/'+mac2+'/o/'+ioid2+'/cmd',msg.payload);
             }
-            else if(valtype2=='rs' || valtype2=='rsdn' || valtype2=='rm'){
+            else if(valtype2=='rs' || valtype2=='rsdn' || valtype2=='rm' || valtype2=='f'){
                 client.publish('ampio/to/'+mac2+'/' + valtype2 + '/'+ioid2+'/cmd',msg.payload);
-            }
-            else if(valtype2=='f'){
-                var outMsg = '0101' + leftPad((Number(ioid2)-1).toString(16),2,'0') + leftPad(Number(msg.payload).toString(16),2,'0');
-                client.publish('ampio/to/'+mac2+'/raw',outMsg);
             }
             else if(valtype2=='ir'){
                 var outMsg = '8206' + leftPad((Number(ioid2)-1).toString(16),2,'0');
@@ -169,7 +165,9 @@ module.exports = function(RED) {
                 res.json(resp[2]);
             }
         });
-    });  
+    });
+    
+    
     RED.httpAdmin.get('/ampio/devices/types', RED.auth.needsPermission('ampio.read'),function(req,res){
         let DevTypes = require('./db/devtypes.json');
         res.json(DevTypes);
