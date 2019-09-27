@@ -111,10 +111,10 @@ module.exports = function(RED) {
             else if(typeof msg.payload === ('string' || 'number')){
                 cmdtype=node.lcdfont;
                 msg = msg.payload.toString();
-                if(node.lcdfont='07' || msg.length > 11){
+                if(node.lcdfont=='07' || msg.length > 11){
                     msg = msg.substr(0, 11);
                 }
-                else if(node.lcdfont='09' || msg.length > 6){
+                else if(node.lcdfont=='09' || msg.length > 6){
                     msg = msg.substr(0, 6);
                 }
                 let msglen = msg.length;
