@@ -17,6 +17,7 @@ Basically, after installing you will have 4 add-ons:
 - Ampio Events, to send and/or receive events from your CAN Network. 
 
 ## Changelog
+0.2.5 - corrected big font bug<br>
 0.2.4 - corrected bug with flags<br>
 0.2.3 - corrected bug - outputs not working<br>
 0.2.2 - corrected the bug - MRT heating/cooling functions were not working, now it's OK; added IR codes sending from MSENS module; updated help files with latest functionalities<br>
