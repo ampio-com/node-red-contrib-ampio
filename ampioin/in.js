@@ -4,53 +4,53 @@ module.exports = function(RED) {
         const node = this;
 
         au = require('../generic/ampio-utils')
-        const mac = au.sanitize_mac(config.mac);
+        node.mac = au.sanitize_mac(config.mac);
 
         //mutable as valtype can overide
-        let ioid = au.sanitize_ioid(config.ioid);
-        let valtype = config.valtype;
+        node.ioid = au.sanitize_ioid(config.ioid);
+        node.valtype = config.valtype;
 
-        const retainignore = config.retainignore;
+        node.retainignore = config.retainignore;
 
-        var client  = au.setup_mqtt_client(node, config)
-        au.setup_node_status_from_mqtt_client(node, client)
+        node.client  = au.setup_mqtt_client(node, config)
+        au.setup_node_status_from_mqtt_client(node)
 
         var JustConnected;
-        var RisingEdgeDetection = false;
-        if (valtype == "re"){
-            valtype = "i";
-            RisingEdgeDetection = true;
+        node.RisingEdgeDetection = false;
+        if (node.valtype == "re"){
+            node.valtype = "i";
+            node.RisingEdgeDetection = true;
         }
 
-        client.on('connect', function () {
-            switch(valtype){
+        node.client.on('connect', function () {
+            switch(node.valtype){
                 case 'hum':
-                valtype = 'au16l';
-                ioid = '1';
+                    node.valtype = 'au16l';
+                    node.ioid = '1';
                 break;
                 case 'absp':
-                valtype = 'au16l';
-                ioid = '2';
+                    node.valtype = 'au16l';
+                    node.ioid = '2';
                 break;
                 case 'relp':
-                valtype = 'au16l';
-                ioid = '6'
+                    node.valtype = 'au16l';
+                    node.ioid = '6'
                 break;
                 case 'db':
-                valtype = 'au16l';
-                ioid = '3';
+                    node.valtype = 'au16l';
+                    node.ioid = '3';
                 break;
                 case 'lux':
-                valtype = 'au16l';
-                ioid = '4';
+                    node.valtype = 'au16l';
+                    node.ioid = '4';
                 break;
                 case 'iaq':
-                valtype = 'au16l';
-                ioid = '5';
+                    node.valtype = 'au16l';
+                    node.ioid = '5';
                 break;
                 case 'temp':
-                valtype = 't';
-                ioid = '1';
+                    node.valtype = 't';
+                    node.ioid = '1';
                 break;
                 default:
                 ;
@@ -64,44 +64,40 @@ module.exports = function(RED) {
             //lux: 'Brightness [lux]',
             //iaq: 'Indoor Air Quality index [IAQ]',
 
-            if(valtype!='raw'){
-                var SubPath = 'ampio/from/'+mac+'/state/'+valtype+'/'+ioid;
+            if(node.valtype!='raw'){
+                node.SubPath = 'ampio/from/' + node.mac + '/state/' + node.valtype + '/' + node.ioid;
             }
-            else if(valtype=='raw'){
-                var SubPath = 'ampio/from/'+mac+'/raw'
+            else if(node.valtype=='raw'){
+                node.SubPath = 'ampio/from/' + node.mac + '/raw'
             }
-            client.subscribe(SubPath, function (err) { //topic to subscribe
-                if (!err && mac!="" && ioid!="" && valtype!="") {
+            node.client.subscribe(node.SubPath, function (err) { // topic to subscribe
+                if (!err && node.mac!="" && node.ioid!="" && node.valtype!="") {
                     node.status({fill: "green", shape: "dot", text: "connected"});
-                    JustConnected=true;
+                    node.JustConnected=true;
                 } else {
-                    node.status({fill: "red", shape: "ring", text:"fill properties"});
+                    node.status({fill: "red", shape: "ring", text: "fill properties"});
                 }
             })
-            
         })
 
+        node.client.on('message', function (topic, message) {
 
-
-        client.on('message', function (topic, message) {
-
-            if(RisingEdgeDetection==true){
+            if(node.RisingEdgeDetection==true){
                 if(message == 1){
-                    var outMsg = {payload: message.toString('utf-8')};
+                    const outMsg = {payload: message.toString('utf-8')};
                     node.send(outMsg);
                 }
-            }
-            else{
-                if(JustConnected==true && retainignore==true){
+            } else {
+                if(node.JustConnected==true && node.retainignore==true){
                     JustConnected=false;
                 }
-                else if(JustConnected==true && retainignore==false){
-                    JustConnected=false;
-                    var outMsg = {payload: message.toString('utf-8')};
+                else if(node.JustConnected==true && node.retainignore==false){
+                    node.JustConnected=false;
+                    const outMsg = {payload: message.toString('utf-8')};
                     node.send(outMsg);
                 }
                 else{
-                    var outMsg = {payload: message.toString('utf-8')};
+                    const outMsg = {payload: message.toString('utf-8')};
                     node.send(outMsg);
                 }
             }
@@ -109,11 +105,11 @@ module.exports = function(RED) {
 
         this.on('close', function() {
             // tidy up any state
-            client.end();
+            node.client.end();
         });
 
     }
-    RED.nodes.registerType("Ampio IN",ampioin);
+    RED.nodes.registerType("Ampio IN", ampioin);
 };
 
 

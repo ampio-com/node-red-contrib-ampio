@@ -29,22 +29,22 @@ exports.setup_mqtt_client = function(node, config) {
     return client;
 }
 
-exports.setup_node_status_from_mqtt_client = function(node, mqtt_client) {
+exports.setup_node_status_from_mqtt_client = function(node) {
     node.status({fill: "yellow", shape: "dot", text: "not connected"});
 
-    mqtt_client.on('reconnect', function () {
+    node.client.on('reconnect', function () {
         node.status({fill:"yellow", shape: "dot", text: "reconnecting"});
     })
 
-    mqtt_client.on('error', function() {
+    node.client.on('error', function() {
         node.status({fill: "red", shape: "dot", text: "error"});
     })
 
-    mqtt_client.on('close', function() {
+    node.client.on('close', function() {
         node.status({fill: "red",shape: "dot", text: "connection closed"});
     })
 
-    mqtt_client.on('offline', function() {
+    node.client.on('offline', function() {
         node.status({fill: "red", shape:"dot", text: "disconnected"});
     })
 }
