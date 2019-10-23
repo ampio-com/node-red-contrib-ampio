@@ -17,6 +17,11 @@ Basically, after installing you will have 4 add-ons:
 - Ampio Events, to send and/or receive events from your CAN Network. 
 
 ## Changelog
+
+### 0.3.x
+0.3.0 - Added functionality of loading input/output descriptions from modules.**Requires MQTT bridge in version 3.14 or later to support this functionality**; corrected encoding in module names<br>
+
+### 0.2.x
 0.2.5 - corrected big font bug<br>
 0.2.4 - corrected bug with flags<br>
 0.2.3 - corrected bug - outputs not working<br>

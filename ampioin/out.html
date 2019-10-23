@@ -27,6 +27,19 @@
             $.getJSON('ampio/outvaluetypes',function(json){
                 ValTypes = json;
             });
+            function b64DecodeUnicode(str) {
+    			// Going backwards: from bytestream, to percent-encoding, to original string.
+    			try{
+    				return decodeURIComponent(atob(str).split('').map(function(c) {
+        			return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    				}).join(''));
+    			}
+    			catch(e){
+    				console.error("b64->UTF-8 error: " + atob(str))
+    				document.getElementById("legacymqtt").style.display = "block";
+    				return atob(str);
+    			}
+			}
             function pad (str, max) {
                 str = str.toString();
                 return str.length < max ? pad("0" + str, max) : str;
@@ -34,35 +47,100 @@
             function GetDevices(){
                 var ip = $('#node-input-srvaddress').val();
                 $("#node-input-mac").empty();
-                $.getJSON('ampio/devices/list/'+ip, function(data) {
-                        $('#node-input-mac').prop('disabled', false);
-                        for (var i = 0; i< data.length; i++){
-                            let dev = data[i];
-                            $("<option value='" + dev.user_mac + "'> " + pad(dev.user_mac,4) + " - " + (DevTypes[dev.typ].type) + " (" + atob(dev.name) + ")</option>").appendTo('#node-input-mac');
-                            let tempObj={};
-                            tempObj.type = dev.typ;
-                            tempObj.name = atob(dev.name);
-                            tempObj.soft = dev.soft_ver;
-                            VisDevices[dev.user_mac] = tempObj;
-                        }
-                        let dev = data[0];
-                        $("#node-input-mac").val(dev.user_mac);
-                        $('#node-input-mac').trigger('change');
-                        if(node.mac != "" && VisDevices.hasOwnProperty(node.mac)){
-                            $("#node-input-mac").val(node.mac);
-                            $('#node-input-mac').trigger('change');
-                        }
-                    
-                })
+                $.getJSON('ampio/devices/list',{ip:ip})
+                .done(function(data){
+					$('#node-input-mac').prop('disabled', false);
+					for (var i = 0; i< data.length; i++){
+						var dev = data[i];
+						$("<option value='" + dev.user_mac + "'> " + pad(dev.user_mac,4) + " - " + (DevTypes[dev.typ].type) + " (" + b64DecodeUnicode(dev.name) + ")</option>").appendTo('#node-input-mac');
+						var tempObj={};
+						tempObj.type = dev.typ;
+						tempObj.name = b64DecodeUnicode(dev.name);
+						tempObj.soft = dev.soft_ver;
+						tempObj.rt=0;
+						
+						if(dev.hasOwnProperty("bi") && dev.hasOwnProperty("bo") && dev.hasOwnProperty("ai") && dev.hasOwnProperty("ao") && dev.hasOwnProperty("f")){
+							tempObj.bi = dev.bi;
+							tempObj.bo = dev.bo;
+							tempObj.ai = dev.ai;
+							tempObj.ao = dev.ao;
+							tempObj.f = dev.f;
+						}
+						else{
+							tempObj.bi = 40;
+							tempObj.bo = 32;
+							tempObj.ai = 8;
+							tempObj.ao = 16;
+							tempObj.f = 32;
+						}
+						if(DevTypes[dev.typ].hasOwnProperty('rt')){
+							tempObj.rt=DevTypes[dev.typ].rt;
+						}
+						VisDevices[dev.user_mac] = tempObj;
+					}
+					var dev = data[0];
+					$("#node-input-mac").val(dev.user_mac);
+					//$('#node-input-mac').trigger('change');
+					if(node.mac != "" && VisDevices.hasOwnProperty(node.mac)){
+						$("#node-input-mac").val(node.mac);
+					}
+					$('#node-input-mac').trigger('change');
+				})
                 .fail(function() {
                     $('#node-input-mac').prop('disabled', 'disabled');
                     $("<option value='" + "error" + "'> " + "Error loading devices!" + "</option>").appendTo('#node-input-mac');
                 });
             }
-
+			function GetDesc(){
+				let ip = $('#node-input-srvaddress').val();
+           		let mac = $('#node-input-mac').val();
+           		let valtype = $('#node-input-valtype').val();
+           		let DevInfo = VisDevices[mac];
+           		$('#node-input-ioid').empty();
+           		let params={
+           			ip:ip,
+           			mac:mac,
+           			bo:DevInfo.bo,
+           			ao:DevInfo.ao,
+           			ai:DevInfo.ai,
+           			bi:DevInfo.bi,
+           			rt:DevInfo.rt,
+           			f:DevInfo.f,
+           			valtype:valtype
+           			};
+           		$.ajax({
+					url: 'ampio/devices/desc/',
+					data: params,
+					dataType: 'json',
+					success: function(data){
+						let legacy=false;
+						for(i=0;i<data.length;i++){
+							if(i==0 && data[i]!=null){
+								$("<option value='" + i + "' disabled> " + atob(data[i]) + "</option>").appendTo('#node-input-ioid');
+								document.getElementById("legacymqtt").style.display = "block";
+								legacy=true;
+								
+							}
+							else if(data[i]!=null){
+								$("<option value='" + i + "'> " + i + ": " + atob(data[i]) + "</option>").appendTo('#node-input-ioid');
+							}
+						}
+						if(!legacy){
+							//document.getElementById("legacymqtt").style.display = "none";
+						}
+						if(node.ioid!='' && node.valtype==valtype && node.mac==mac){
+                            $("#node-input-ioid").val(node.ioid);
+                            $('#node-input-ioid').trigger('change');
+                        }
+					},
+					error: function(data){
+					}
+				});
+			};
 
             GetDevices();
             $("#node-input-lookup-devices").on("click",function(){
+            	document.getElementById("legacymqtt").style.display = "none";
                 GetDevices();
             });
 
@@ -70,7 +148,7 @@
                 $("#node-input-valtype").empty();
                 let mac = $('#node-input-mac').val()
                 if(VisDevices.hasOwnProperty(mac)){
-                    if(DevTypes[VisDevices[mac].type].hasOwnProperty('outoptions')){
+				  if(DevTypes[VisDevices[mac].type].hasOwnProperty('outoptions')){
                         let outoptions = DevTypes[VisDevices[mac].type].outoptions;
                         let NodeValtypeExists = false;
                         for(let i = 0; i < outoptions.length; i++){
@@ -82,11 +160,21 @@
 
                         if(node.valtype != '' && NodeValtypeExists){
                             $("#node-input-valtype").val(node.valtype);
-                            $('#node-input-valtype').trigger('change');
                         }
+                        $('#node-input-valtype').trigger('change');
                     }
+                    //$('#node-input-valtype').trigger('change');
                 }
+                //$('#node-input-valtype').trigger('change');
                 
+            });
+            
+            $('#node-input-valtype').on('change', function(){
+            	if($("#node-input-mac").val()!==null){
+            		$("#node-input-ioid").empty();
+            		GetDesc();
+            	};
+            	
             });
 
         }
@@ -123,13 +211,15 @@
     </div>
     <div class="form-row" style="display: none;" id="ioid">
         <label for="node-input-ioid"><i class="icon-tag"></i> I/O ID</label>
-        <input type="text" id="node-input-ioid" placeholder="ex. 1">
+        <select id="node-input-ioid" style="width: 70%;"></select>
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
-    
+    <div class="form-tips" style='display: none' id='legacymqtt'>
+    	<b>Warning:</b> Please update MQTT bridge on your MSERV.
+    </div>
 
     <script type="text/javascript">
         $("#node-input-valtype").change(function(){

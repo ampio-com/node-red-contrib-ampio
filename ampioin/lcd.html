@@ -28,42 +28,56 @@
             $.getJSON('ampio/devices/types',function(json){
                 DevTypes = json;
             });
+            
+            function b64DecodeUnicode(str) {
+    			// Going backwards: from bytestream, to percent-encoding, to original string.
+    			try{
+    				return decodeURIComponent(atob(str).split('').map(function(c) {
+        			return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    				}).join(''));
+    			}
+    			catch(e){
+    				console.error("b64->UTF-8 error: " + atob(str))
+    				document.getElementById("legacymqtt").style.display = "block";
+    				return atob(str);
+    			}
+			}
             function pad (str, max) {
                 str = str.toString();
                 return str.length < max ? pad("0" + str, max) : str;
             }
             function GetDevices(ip){
                 $("#node-input-mac").empty();
-                $.getJSON('ampio/devices/list/'+ip, function(data) {
-                    $('#node-input-mac').prop('disabled', false);
-                    for (var i = 0; i< data.length; i++){
-                        let dev = data[i];
-                        if(dev.typ == 27 || dev.typ == 32 || dev.typ == 51 || dev.typ == 52){
-                            $("<option value='" + dev.user_mac + "'> " + pad(dev.user_mac,4) + " - " + (DevTypes[dev.typ].type) + " (" + atob(dev.name) + ")</option>").appendTo('#node-input-mac');
-                            let tempObj={};
-                            tempObj.type = dev.typ;
-                            tempObj.name = atob(dev.name);
-                            tempObj.soft = dev.soft_ver;
-                            VisDevices[dev.user_mac] = tempObj;
-                        }
-                    }
-                    $("#node-input-mac").val($("#node-input-mac option:first").val());
-                    $('#node-input-mac').trigger('change');
-                    if(node.mac != "" && VisDevices.hasOwnProperty(node.mac)){
-                        $("#node-input-mac").val(node.mac);
-                        $('#node-input-mac').trigger('change');
-                    }
-                })
-                .fail(function() {
-                    $('#node-input-mac').prop('disabled', 'disabled');
-                    $("<option value='" + "error" + "'> " + "Error loading devices!" + "</option>").appendTo('#node-input-mac');
-                });
+                $.getJSON('ampio/devices/list', {ip:ip})
+                	.done(function(data){
+						$('#node-input-mac').prop('disabled', false);
+						for (var i = 0; i< data.length; i++){
+							let dev = data[i];
+							if(dev.typ == 27 || dev.typ == 32 || dev.typ == 51 || dev.typ == 52){
+								$("<option value='" + dev.user_mac + "'> " + pad(dev.user_mac,4) + " - " + (DevTypes[dev.typ].type) + " (" + b64DecodeUnicode(dev.name) + ")</option>").appendTo('#node-input-mac');
+								let tempObj={};
+								tempObj.type = dev.typ;
+								tempObj.name = b64DecodeUnicode(dev.name);
+								tempObj.soft = dev.soft_ver;
+								VisDevices[dev.user_mac] = tempObj;
+							}
+						}
+						$("#node-input-mac").val($("#node-input-mac option:first").val());
+						$('#node-input-mac').trigger('change');
+						if(node.mac != "" && VisDevices.hasOwnProperty(node.mac)){
+							$("#node-input-mac").val(node.mac);
+							$('#node-input-mac').trigger('change');
+						}
+					})
+					.fail(function(){
+						$('#node-input-mac').prop('disabled', 'disabled');
+						$("<option value='" + "error" + "'> " + "Error loading devices!" + "</option>").appendTo('#node-input-mac');
+					});
             }
             GetDevices(ip);
             
             $("#node-input-lookup-devices").on("click",function(){
                 var ip = $('#node-input-srvaddress').val();
-                //$("node-input-mac").html("");
                 GetDevices(ip);
             });
         }
