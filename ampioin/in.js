@@ -84,7 +84,10 @@ module.exports = function(RED) {
 
             if(node.RisingEdgeDetection==true){
                 if(message == 1){
-                    const outMsg = {payload: message.toString('utf-8')};
+                    const outMsg = {
+                    	payload: message.toString('utf-8'),
+                    	mac: node.mac
+                    };
                     node.send(outMsg);
                 }
             } else {
