@@ -1,108 +1,63 @@
 module.exports = function(RED) {
-    
-
-
     function ampioout(config) {
-        
         RED.nodes.createNode(this,config);
-        var context = this.context();
         var node = this;
-        this.mac = config.mac;
-        this.ioid = config.ioid;
-        this.valtype = config.valtype;
-        this.srvaddress = config.srvaddress;
+        au = require('../generic/ampio-utils');
+		node.mac = au.sanitize_mac(config.mac);
+        node.ioid = au.sanitize_ioid(config.ioid);
+        node.valtype = config.valtype;
+        node.srvaddress = config.srvaddress;
         
-
-        var mqtt = require('mqtt');
         const leftPad = require('left-pad');
-        var client  = mqtt.connect('mqtt://'+node.srvaddress);
-        var n=false;
+        node.client  = au.setup_mqtt_client(node, config)
 
-        var mac = node.mac;
-        var ioid = node.ioid;
-        var valtype = node.valtype;
+    	au.setup_node_status_from_mqtt_client(node)
 
-
-
-        mac = mac.toUpperCase();
-        node.status({fill:"yellow",shape:"dot",text:"not connected"});
-        
-
-
-        while(n==false){
-            if(ioid[0]=='0'){
-                ioid = ioid.substring(1);
-            }
-            else{
-                n=true;
-            }
-        }
-
-        client.on('connect', function () {
+		node.client.on('connect', function () {
             node.status({fill:"green",shape:"dot",text:"connected"});
         })
-
-        client.on('error', function () {
-            node.status({fill:"red",shape:"dot",text:"unable to connect"});
-        })
-
-        client.on('reconnect', function () {
-            node.status({fill:"yellow",shape:"dot",text:"reconnecting"});
-        })
-
-        client.on('error', function() {
-            node.status({fill:"red",shape:"dot",text:"error"});
-        })
-
-        client.on('close', function() {
-            node.status({fill:"red",shape:"dot",text:"connection closed"});
-        })
-
-        client.on('offline', function() {
-            node.status({fill:"red",shape:"dot",text:"disconnected"});
-        })
-
+			
         this.on("input", function(msg) {
             if(msg.hasOwnProperty('valtype')){
                 var valtype2=msg.valtype;
             }
             else{
-                var valtype2=valtype;
+                var valtype2=node.valtype;
             }
             if(msg.hasOwnProperty('mac')){
                 var mac2=msg.mac;
             }
             else{
-                var mac2=mac;
+                var mac2=node.mac;
             }
             if(msg.hasOwnProperty('ioid')){
                 var ioid2=msg.ioid;
             }
             else{
-                var ioid2=ioid;
+                var ioid2=node.ioid;
             }
             if(valtype2=='r'){
-                client.publish('ampio/to/'+mac2+'/raw',msg.payload.toString());
+                node.client.publish('ampio/to/'+mac2+'/raw',msg.payload.toString());
             }
             else if(valtype2=='s'){
-                client.publish('ampio/to/'+mac2+'/o/'+ioid2+'/cmd',msg.payload);
+                node.client.publish('ampio/to/'+mac2+'/o/'+ioid2+'/cmd',msg.payload);
             }
             else if(valtype2=='rs' || valtype2=='rsdn' || valtype2=='rm' || valtype2=='f'){
-                client.publish('ampio/to/'+mac2+'/' + valtype2 + '/'+ioid2+'/cmd',msg.payload);
+                node.client.publish('ampio/to/'+mac2+'/' + valtype2 + '/'+ioid2+'/cmd',msg.payload);
             }
             else if(valtype2=='ir'){
                 var outMsg = '8206' + leftPad((Number(ioid2)-1).toString(16),2,'0');
-                client.publish('ampio/to/'+mac2+'/raw',outMsg);
+                node.client.publish('ampio/to/'+mac2+'/raw',outMsg);
             }
             else{
-                client.publish('ampio/to/'+mac2+'/'+valtype2+'/'+ioid2+'/cmd',msg.payload);
+                node.client.publish('ampio/to/'+mac2+'/'+valtype2+'/'+ioid2+'/cmd',msg.payload);
             }
                 
         })
 
         this.on('close', function() {
             // tidy up any state
-            client.end();
+            node.client.end();
         });
 
     }

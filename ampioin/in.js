@@ -2,16 +2,13 @@ module.exports = function(RED) {
     function ampioin(config) {
         RED.nodes.createNode(this, config);
         const node = this;
-
-        au = require('../generic/ampio-utils')
+        au = require('../generic/ampio-utils');
+        
         node.mac = au.sanitize_mac(config.mac);
-
-        //mutable as valtype can overide
         node.ioid = au.sanitize_ioid(config.ioid);
         node.valtype = config.valtype;
-
         node.retainignore = config.retainignore;
-
+        
         node.client  = au.setup_mqtt_client(node, config)
         au.setup_node_status_from_mqtt_client(node)
 
