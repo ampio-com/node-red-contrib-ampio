@@ -1,7 +1,7 @@
 module.exports = function(RED) {
     function ampioout(config) {
         RED.nodes.createNode(this,config);
-        var node = this;
+        const node = this;
         au = require('../generic/ampio-utils');
 		node.mac = au.sanitize_mac(config.mac);
         node.ioid = au.sanitize_ioid(config.ioid);
@@ -17,7 +17,7 @@ module.exports = function(RED) {
             node.status({fill:"green",shape:"dot",text:"connected"});
         })
 			
-        this.on("input", function(msg) {
+        node.on("input", function(msg) {
             if(msg.hasOwnProperty('valtype')){
                 var valtype2=msg.valtype;
             }
@@ -40,22 +40,22 @@ module.exports = function(RED) {
                 node.client.publish('ampio/to/'+mac2+'/raw',msg.payload.toString());
             }
             else if(valtype2=='s'){
-                node.client.publish('ampio/to/'+mac2+'/o/'+ioid2+'/cmd',msg.payload);
+                node.client.publish('ampio/to/'+mac2+'/o/'+ioid2+'/cmd',msg.payload.toString());
             }
             else if(valtype2=='rs' || valtype2=='rsdn' || valtype2=='rm' || valtype2=='f'){
-                node.client.publish('ampio/to/'+mac2+'/' + valtype2 + '/'+ioid2+'/cmd',msg.payload);
+                node.client.publish('ampio/to/'+mac2+'/' + valtype2 + '/'+ioid2+'/cmd',msg.payload.toString());
             }
             else if(valtype2=='ir'){
                 var outMsg = '8206' + leftPad((Number(ioid2)-1).toString(16),2,'0');
                 node.client.publish('ampio/to/'+mac2+'/raw',outMsg);
             }
             else{
-                node.client.publish('ampio/to/'+mac2+'/'+valtype2+'/'+ioid2+'/cmd',msg.payload);
+                node.client.publish('ampio/to/'+mac2+'/'+valtype2+'/'+ioid2+'/cmd',msg.payload.toString());
             }
                 
         })
 
-        this.on('close', function() {
+        node.on('close', function() {
             // tidy up any state
             node.client.end();
         });
@@ -63,6 +63,7 @@ module.exports = function(RED) {
     }
     RED.nodes.registerType("Ampio OUT",ampioout);
 
+	/*
     RED.httpAdmin.get('/ampio/devices/list', RED.auth.needsPermission('ampio.read'),function(req,res){
         
         var mqtt = require('mqtt');
@@ -125,8 +126,10 @@ module.exports = function(RED) {
                 res.json(resp[2]);
             }
         });
-    });
-    
+	});
+	*/
+	
+	/*
     RED.httpAdmin.get('/ampio/debug', RED.auth.needsPermission('ampio.read'),function(req,res){
         //narzędzie do debugowania sieci CAN. Przykład: http://IPMSERV:1880/ampio/debug?ip=IPMSERV&param=can
         //param: can lub version. can zwróci ilość pakietów i błędów, version zwróci wersję mostu.
@@ -429,9 +432,10 @@ module.exports = function(RED) {
             	res.json(PrepareList(resp[2]));
             }
         });
-    });
+	});
+	*/
     
-    
+    /*
     RED.httpAdmin.get('/ampio/devices/types', RED.auth.needsPermission('ampio.read'),function(req,res){
         let DevTypes = require('./db/devtypes.json');
         res.json(DevTypes);
@@ -448,6 +452,7 @@ module.exports = function(RED) {
         res.json(ValTypes);
       });
 
+	  */
 };
 
 

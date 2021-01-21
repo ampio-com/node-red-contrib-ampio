@@ -1,0 +1,24 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+     
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Launch Node-red",
+        "program": "/usr/local/bin/node-red",
+        "runtimeArgs": ["--preserve-symlinks", "--experimental-modules", "--inspect", "--inspect-brk"],
+        "env": {
+          "NO_UPDATE_NOTIFIER": "1"
+        }
+      },
+      {
+        "type": "node",
+        "request": "launch",
+        "name": "Debug Current File",
+        "program": "${file}"
+      },
+      { "type": "node", "request": "attach", "name": "Attach to Process", "processId": "${command:PickProcess}" } 
+      
+    ]
+  }

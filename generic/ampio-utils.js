@@ -48,3 +48,21 @@ exports.setup_node_status_from_mqtt_client = function(node) {
         node.status({fill: "red", shape:"dot", text: "disconnected"});
     })
 }
+
+exports.hex2rgb565 = function (hexcol){
+	let r=hexcol.substring(0,2);
+	let g=hexcol.substring(2,4);
+	let b=hexcol.substring(4,6);
+
+	r = parseInt(r,16);
+	g = parseInt(g,16);
+	b = parseInt(b,16);
+
+	let r5 = r>>3;
+	let g6 = g>>2;
+	let b5 = b>>3;
+
+	let rgb565 = r5<<11 | g6<<5 | b5;
+	rgb565 = leftPad(rgb565.toString(16),4,'0');
+	return rgb565.toUpperCase()
+}

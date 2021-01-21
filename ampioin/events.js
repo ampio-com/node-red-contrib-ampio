@@ -1,6 +1,5 @@
 module.exports = function(RED) {
     function ampioevents(config) {
-        
         RED.nodes.createNode(this,config);
         var context = this.context();
         var node = this;

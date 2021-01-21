@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-ampio",
-  "version": "0.3.0",
+  "version": "0.4.0-alpha.0",
   "description": "Ampio node",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,7 +13,8 @@
       "ampioin": "ampioin/in.js",
       "ampioout": "ampioin/out.js",
       "ampiolcd": "ampioin/lcd.js",
-      "ampioevents": "ampioin/events.js"
+      "ampioevents": "ampioin/events.js",
+      "ampioconfig":"ampioin/ampio-config.js"
     }
   },
   "author": "Ampio Sp. z o.o.",

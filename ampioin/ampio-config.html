@@ -1,154 +1,72 @@
-<script type="text/x-red" data-template-name="node-hue-bridge">
-  <div class="form-row" style="white-space: nowrap;">
-    <label for="node-config-input-address"><i class="fa fa-globe"></i> Host</label>
-    <div style="display: inline-block; position: relative; width: 70%; height: 20px;">
-      <div style="position: absolute; left: 0px; right: 40px;">
-        <input type="text" id="node-config-input-address" placeholder="Address" style="width: 100%;">
-      </div>
-      <a id="node-input-lookup-address" title="Search for Hubs" class="editor-button" style="position: absolute; right: 0px; top: 0px;">
-        <i class="fa fa-search"></i>
-      </a>
+<script type="text/html" data-template-name="ampioconfig">
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</span></label>
+        <input type="text" id="node-config-input-name" placeholder="Name">
     </div>
-  </div>
-  <div class="form-row" style="white-space: nowrap;">
-    <label for="node-config-input-key"><i class="fa fa-key"></i> API key</label>
-    <div style="display: inline-block; position: relative; width: 70%; height: 20px;">
-      <div style="position: absolute; left: 0px; right: 40px;">
-        <input type="text" id="node-config-input-key" placeholder="Click button to register user" style="width: 100%;">
-      </div>
-      <a id="node-input-lookup-key" title="Register User" class="editor-button" style="position: absolute; right: 0px; top: 0px;">
-        <i class="fa fa-user-circle-o"></i>
-      </a>
+    <div class="form-row">
+        <ul style="min-width: 600px; margin-bottom: 20px;" id="node-ampioconfig-server-tabs"></ul>
     </div>
-  </div>
-  <div class="form-row">
-    <label for="node-config-input-interval"><i class="fa fa-clock-o"></i> Poll interval</label>
-    <input type="text" id="node-config-input-interval">
-  </div>
-  <div class="form-row">
-    <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
-    <input type="text" id="node-config-input-name">
-  </div>
-</script>
-
-<script type="text/x-red" data-help-name="node-hue-bridge">
-  <p>Server managing communication with Philips Hue bridge.</p>
-  <ul>
-    <li><b>Host</b> Hue bridge address (port is optional)</li>
-    <li><b>API key</b> Hue bridge authorization key, enter key manually or press button to retreive key from bridge. The button can also be used to validate provided key</li>
-    <li><b>Poll interval</b> Interval that is used to poll lights for changes (min 500ms)</li>
-    <li><b>Name</b> Node name</li>
-  </ul>
+    <div id="node-ampioconfig-server-tabs-content" style="min-height:150px;">
+        <div id="ampioconfig-tab-connection" style="display:none">
+            <div class="form-row node-input-server">
+                <label for="node-config-input-server"><i class="fa fa-globe"></i> Server</label>
+                <input type="text" id="node-config-input-server" style="width:40%;" placeholder="e.g. localhost">
+                <label for="node-config-input-port" style="margin-left:20px; width:43px; "> Port</label>
+                <input type="text" id="node-config-input-port" placeholder="default: 1883" style="width:55px">
+            </div>
+            <!--TLS ktorego jeszcze nie ma, planowany w 1.1.0-->
+        </div>
+        <div id="ampioconfig-tab-security" style="display:none">
+            <div class="form-row">
+                <label for="ampioconfig-input-user"><i class="fa fa-user"></i> User</span></label>
+                <input type="text" id="ampioconfig-input-user">
+            </div>
+            <div class="form-row">
+                <label for="ampioconfig-input-password"><i class="fa fa-lock"></i> Password</span></label>
+                <input type="password" id="ampioconfig-input-password">
+            </div>
+        </div>
+    </div>
 </script>
 
 <script type="text/javascript">
-/* eslint require-jsdoc: 0 */
-/* eslint-env jquery */
-  RED.nodes.registerType('node-hue-bridge',{
-    category: 'config',
-    defaults: {
-      name:    { value: 'Hue Bridge',  required: true },
-      address: { required: true },
-      key:     { required: true },
-      interval: {
-        value: 10000,
-        required: true,
-        validate: function(v) {
-          return (/^[0-9]+/.test(v) && parseInt(v,10) >= 500);
+    RED.nodes.registerType('ampioconfig',{
+        category: 'config',
+        defaults: {
+            name: {value:""},
+            server: {value:"",required:true},
+            port: {value:1883,required:false,validate:RED.validators.number(true)},
         },
-      },
-    },
-    label: function() {
-      return this.name;
-    },
-    oneditprepare: function() {
-      var htmlAddressID    = '#node-config-input-address';
-      var htmlAddressText  = '<input type="text" id="node-config-input-address" placeholder="Address" style="width: 100%;">';
-      var htmlAddressCombo = '<select            id="node-config-input-address" placeholder="Address" style="width: 100%;"/>';
-      // Convert to combobox
-      function enableAddressCombobox() {
-        var val = $(htmlAddressID).val();
-        $.getJSON('node-hue/nupnp')
-          .done(function(serverList) {
-            function findFunc(server) {
-              return (server.ipaddress === val);
-            }
-            // No data returned
-            if (serverList == null || serverList.length === 0) {
-              RED.notify("No Hue Bridge found", "error");
-              return;
-            }
-            // Convert to select
-            $('#node-input-lookup-address > i').toggleClass('fa-search', false).toggleClass('fa-edit', true);
-            $(htmlAddressID).replaceWith(htmlAddressCombo);
-            // Add option
-            var input = $(htmlAddressID);
-            // Add servers
-            serverList.forEach(function(server) {
-              input.append($('<option/>').val(server.ipaddress).text(
-                server.name ? (server.name + '(' + server.ipaddress + ')') : server.ipaddress
-              ));
+        credentials: {
+            user: {type:"text"},
+            password: {type: "password"}
+        },
+        label: function() {
+            return this.name||"Ampio Config";
+        },
+        oneditprepare: function () {
+            var tabs = RED.tabs.create({
+                id: "node-ampioconfig-server-tabs",
+                onchange: function(tab) {
+                    $("#node-ampioconfig-server-tabs-content").children().hide();
+                    $("#" + tab.id).show();
+                }
             });
-            // Do we have an value, check if value match any existing and if not add it as unknown entry
-            if (typeof val === 'string' && val.length && serverList.find(findFunc) === undefined) {
-              input.prepend($('<option/>').val(val).text('Unknown "'+val+'"'));
+            tabs.addTab({
+                id: "ampioconfig-tab-connection",
+                label: "Connection"
+            });
+            tabs.addTab({
+                id: "ampioconfig-tab-security",
+                label: "Credentials"
+            });
+            var node = this;
+
+        },
+        oneditsave: function() {
+            if (!$("#node-config-input-usetls").is(':checked')) {
+                $("#node-config-input-tls").val("");
             }
-            // If nothing is provided, select first item in list
-            if ((typeof val !== 'string' || !val.length) && serverList.length > 0) {
-              val = serverList[0].ipaddress;
-            }
-            // Select current value
-            input.val(val);
-          })
-          .fail(function(err) {
-            RED.notify(err.responseText, "error");
-          });
-      }
-      // Convert to textbox
-      function enableAddressTextbox() {
-        var val = $(htmlAddressID).val();
-        // Convert to text
-        $('#node-input-lookup-address > i').toggleClass('fa-search', true).toggleClass('fa-edit', false);
-        $(htmlAddressID).replaceWith(htmlAddressText);
-        // Insert current value
-        $(htmlAddressID).val(val);
-      }
-      // Switch between combobox and textbox
-      $('#node-input-lookup-address').click( function() {
-        if ($(htmlAddressID).attr('type') === 'text') {
-          enableAddressCombobox();
         }
-        else {
-          enableAddressTextbox();
-        }
-      });
-      // Get/Validate API key
-      $('#node-input-lookup-key').click( function() {
-        var address = $('#node-config-input-address').val();
-        if (!address || address.length === 0) {
-          return RED.notify("Missing bridge address", "error");
-        }
-        var key = $('#node-config-input-key').val();
-        // Test key
-        if (key) {
-          $.getJSON('node-hue/validate_key', { 'address': address, 'key': key })
-          .done(function() {
-            RED.notify('Valid bridge authorization key', 'notice');
-          })
-          .fail(function(err) {
-            RED.notify(err.responseText, "error");
-          });
-          return;
-        }
-        // Register
-        $.getJSON('node-hue/register', { 'address': address })
-        .done(function(data) {
-          $('#node-config-input-key').val(data);
-        })
-        .fail(function(err) {
-          RED.notify(err.responseText, "error");
-        });
-      });
-    }
-  });
+    });
 </script>

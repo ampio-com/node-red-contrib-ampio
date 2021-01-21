@@ -1,99 +1,42 @@
 module.exports = function(RED) {
     function ampiolcd(config) {
-        
         RED.nodes.createNode(this,config);
-        var context = this.context();
-        var node = this;
-        this.mac = config.mac;
-        this.lcdfont = config.lcdfont;
-        this.lcdxpos = config.lcdxpos;
-        this.lcdypos = config.lcdypos;
-        this.lcdcharcolor = config.lcdcharcolor;
-        this.lcdbackcolor = config.lcdbackcolor;
-        this.srvaddress = config.srvaddress;
+        const node = this;
+        au = require('../generic/ampio-utils');
+        node.mac = au.sanitize_mac(config.mac);
+        node.lcdfont = config.lcdfont;
+        node.lcdxpos = config.lcdxpos;
+        node.lcdypos = config.lcdypos;
+        node.lcdcharcolor = config.lcdcharcolor;
+        node.lcdbackcolor = config.lcdbackcolor;
+        node.srvaddress = config.srvaddress;
 
-        var mqtt = require('mqtt');
         const leftPad = require('left-pad');
-        var client  = mqtt.connect('mqtt://'+node.srvaddress);
-
-        var m=false;
-
-        var mac = node.mac;
-
-        mac = mac.toUpperCase();
-        node.status({fill:"yellow",shape:"dot",text:"not connected"});
-
-        
-        while(m==false){
-            if(mac[0]=='0'){
-                mac = mac.substring(1);
-            }
-            else{
-                m=true;
-            }
-        }
-
-        function hex2rgb565(hexcol){
-            let r=hexcol.substring(0,2);
-            let g=hexcol.substring(2,4);
-            let b=hexcol.substring(4,6);
-
-            r = parseInt(r,16);
-            g = parseInt(g,16);
-            b = parseInt(b,16);
-
-            let r5 = r>>3;
-            let g6 = g>>2;
-            let b5 = b>>3;
+	
+		node.client  = au.setup_mqtt_client(node, config)
+        au.setup_node_status_from_mqtt_client(node)
 
 
-            let rgb565 = r5<<11 | g6<<5 | b5;
-            rgb565 = leftPad(rgb565.toString(16),4,'0');
-            return rgb565
-        }
-
-
-        client.on('connect', function () {
+        node.client.on('connect', function () {
             node.status({fill:"green",shape:"dot",text:"connected"});
         })
 
-        client.on('error', function () {
-            node.status({fill:"red",shape:"dot",text:"unable to connect"});
-        })
-
-        client.on('reconnect', function () {
-            node.status({fill:"yellow",shape:"dot",text:"reconnecting"});
-        })
-
-        client.on('error', function() {
-            node.status({fill:"red",shape:"dot",text:"error"});
-        })
-
-        client.on('close', function() {
-            node.status({fill:"red",shape:"dot",text:"connection closed"});
-        })
-
-        client.on('offline', function() {
-            node.status({fill:"red",shape:"dot",text:"disconnected"});
-        })
 
         
-        var xpos = node.lcdxpos.toString(16);
-        xpos = leftPad(xpos,2,'0');
-        var ypos = node.lcdypos.toString(16);
-        ypos = leftPad(ypos,2,'0');
+        node.lcdxpos = node.lcdxpos.toString(16);
+        node.lcdxpos = leftPad(node.lcdxpos,2,'0');
+        node.lcdypos = node.lcdypos.toString(16);
+        node.lcdypos = leftPad(ypos,2,'0');
         if(node.lcdcharcolor[0]=='#'){
             node.lcdcharcolor=node.lcdcharcolor.substring(1);
         }
         if(node.lcdbackcolor[0]=='#'){
             node.lcdbackcolor=node.lcdcharcolor.substring(1);
         }
-        var crgb565 = hex2rgb565(node.lcdcharcolor);
-        var brgb565 = hex2rgb565(node.lcdbackcolor);
-        crgb565 = crgb565.toUpperCase();
-        brgb565 = brgb565.toUpperCase();
+        var crgb565 = au.hex2rgb565(node.lcdcharcolor);
+        var brgb565 = au.hex2rgb565(node.lcdbackcolor);
 
-        this.on("input", function(msg) {
+        node.on("input", function(msg) {
 
             var outstr = "2901";
             
@@ -109,7 +52,6 @@ module.exports = function(RED) {
                 outstr = outstr + "04" + leftPad(msg.payload.square.x1.toString(16),2,'0') + leftPad(msg.payload.square.y1.toString(16),2,'0') + leftPad(msg.payload.square.x2.toString(16),2,'0') + leftPad(msg.payload.square.y2.toString(16),2,'0') + hex2rgb565(msg.payload.square.col).toUpperCase();
             }
             else if(typeof msg.payload === ('string' || 'number')){
-                cmdtype=node.lcdfont;
                 msg = msg.payload.toString();
                 if(node.lcdfont=='07' || msg.length > 11){
                     msg = msg.substr(0, 11);
@@ -119,17 +61,17 @@ module.exports = function(RED) {
                 }
                 let msglen = msg.length;
                 var restofmsg = leftPad(msglen.toString(16),2,'0') + Buffer.from(msg,'utf-8').toString('hex');
-                outstr = outstr + node.lcdfont + xpos + ypos + crgb565 + brgb565 + leftPad(msglen.toString(16),2,'0') + Buffer.from(msg,'utf-8').toString('hex');
+                outstr = outstr + node.lcdfont + node.lcdxpos + node.lcdypos + crgb565 + brgb565 + leftPad(msglen.toString(16),2,'0') + Buffer.from(msg,'utf-8').toString('hex');
             }
-            client.publish('ampio/to/'+mac+'/raw',outstr);
+            node.client.publish('ampio/to/'+mac+'/raw',outstr);
             
             
             
         })
 
-        this.on('close', function() {
+        node.on('close', function() {
             // tidy up any state
-            client.end();
+            node.client.end();
         });
 
     }
