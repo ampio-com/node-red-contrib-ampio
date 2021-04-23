@@ -778,37 +778,54 @@
     },
     {
        "value":60,
-       "type":"UNKNOWN",
+       "type":"MDOT-M15",
        "inoptions":[
-          "f"
-       ],
-       "outoptions":[
-          "f"
-       ]
+         "i",
+         "re",
+         "t",
+         "f"
+      ],
+      "outoptions":[
+         "s",
+         "r",
+         "f"
+      ]
     },
     {
        "value":61,
-       "type":"UNKNOWN",
+       "type":"MULTIROOM",
        "inoptions":[
-          "f"
-       ],
-       "outoptions":[
-          "f"
-       ]
+         "o",
+         "i",
+         "re",
+         "t",
+         "f"
+      ],
+      "outoptions":[
+         "s",
+         "r",
+         "f"
+      ]
     },
     {
        "value":62,
-       "type":"UNKNOWN",
+       "type":"MREL-10",
        "inoptions":[
-          "f"
-       ],
-       "outoptions":[
-          "f"
-       ]
+         "o",
+         "i",
+         "re",
+         "t",
+         "f"
+      ],
+      "outoptions":[
+         "s",
+         "r",
+         "f"
+      ]
     },
     {
        "value":63,
-       "type":"UNKNOWN",
+       "type":"MENOCEAN",
        "inoptions":[
           "f"
        ],
@@ -830,5 +847,64 @@
           "r",
           "f"
        ]
-    }
+    },
+    {
+      "value":65,
+      "type":"UNKNOWN",
+      "inoptions":[
+         "f"
+      ],
+      "outoptions":[
+         "f"
+      ]
+   },
+   {
+      "value":66,
+      "type":"MALARM",
+      "inoptions":[
+         "f"
+      ],
+      "outoptions":[
+         "f"
+      ]
+   },
+   {
+      "value":67,
+      "type":"UNKNOWN",
+      "inoptions":[
+         "f"
+      ],
+      "outoptions":[
+         "f"
+      ]
+   },
+   {
+      "value":68,
+      "type":"MDOT-M18",
+      "inoptions":[
+        "i",
+        "re",
+        "t",
+        "f"
+     ],
+     "outoptions":[
+        "s",
+        "r",
+        "f"
+     ]
+   },
+   {
+      "value":69,
+      "type":"MDIM-2s",
+      "inoptions":[
+         "a",
+         "o",
+         "f"
+      ],
+      "outoptions":[
+         "s",
+         "r",
+         "f"
+      ]
+   }
  ]
