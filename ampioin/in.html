@@ -21,10 +21,12 @@
             var DevTypes;
             var ValTypes;
             var VisDevices={};
-            $.getJSON('ampio/devices/types',function(json){
+            let cfgid = $("#node-input-server").val();
+
+            $.getJSON('ampio/'+cfgid+'/devices/types',function(json){
                 DevTypes = json;
             });
-            $.getJSON('ampio/invaluetypes',function(json){
+            $.getJSON('ampio/'+cfgid+'/invaluetypes',function(json){
                 ValTypes = json;
             });
             function b64DecodeUnicode(str) {
@@ -47,7 +49,7 @@
             function GetDevices(){
                 var ip = $('#node-input-srvaddress').val();
                 $("#node-input-mac").empty();
-                $.getJSON('ampio/devices/list',{ip:ip})
+                $.getJSON('ampio/'+cfgid+'/devices/list',{ip:ip})
                 .done(function(data){
 					$('#node-input-mac').prop('disabled', false);
 					for (var i = 0; i< data.length; i++){
@@ -109,7 +111,7 @@
            			valtype:valtype
            			};
            		$.ajax({
-					url: 'ampio/devices/desc/',
+					url: 'ampio/'+cfgid+'/devices/desc/',
 					data: params,
 					dataType: 'json',
 					success: function(data){
@@ -138,8 +140,17 @@
 				});
 			};
 
+            $("#node-input-server").on("change",function(){
+                $("#node-input-lookup-devices").trigger('click');
+            })
+
             GetDevices();
             $("#node-input-lookup-devices").on("click",function(){
+                cfgid = $("#node-input-server").val();
+                $.getJSON('ampio/'+cfgid+'/devices/types',function(json){
+                    DevTypes = json;
+                });
+
             	document.getElementById("legacymqtt").style.display = "none";
                 GetDevices();
             });

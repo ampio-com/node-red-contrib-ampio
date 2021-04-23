@@ -4,7 +4,7 @@
         color: '#d4d9db',
         defaults: {
             name: {value:""},
-            srvaddress: {value:"localhost"}
+            server: {type:"ampioconfig", required:true}
         },
         inputs:1,
         outputs:1,
@@ -18,8 +18,9 @@
 
 <script type="text/x-red" data-template-name="Ampio Events">
     <div class="form-row">
-        <label for="node-input-srvaddress"><i class="icon-tag"></i> Server address</label>
-        <input type="text" id="node-input-srvaddress" placeholder="localhost">
+        <label for="node-input-srvaddress"><i class="icon-tag"></i> Server</label>
+        <input type="text" id="node-input-server">    
+        </input>
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>

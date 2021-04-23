@@ -10,7 +10,7 @@
             lcdbackcolor: {value:"000000"},
             mac: {value:""},
             name: {value:""},
-            srvaddress: {value:"localhost"}
+            server: {type:"ampioconfig", required:true}
         },
         inputs:1,
         outputs:0,
@@ -24,8 +24,9 @@
             var devices;
             var DevTypes;
             var VisDevices={};
-            var ip = $('#node-input-srvaddress').val();
-            $.getJSON('ampio/devices/types',function(json){
+            let cfgid = $("#node-input-server").val();
+
+            $.getJSON('ampio/'+cfgid+'/devices/types',function(json){
                 DevTypes = json;
             });
             
@@ -46,9 +47,9 @@
                 str = str.toString();
                 return str.length < max ? pad("0" + str, max) : str;
             }
-            function GetDevices(ip){
+            function GetDevices(){
                 $("#node-input-mac").empty();
-                $.getJSON('ampio/devices/list', {ip:ip})
+                $.getJSON('ampio/'+cfgid+'/devices/list')
                 	.done(function(data){
 						$('#node-input-mac').prop('disabled', false);
 						for (var i = 0; i< data.length; i++){
@@ -74,11 +75,18 @@
 						$("<option value='" + "error" + "'> " + "Error loading devices!" + "</option>").appendTo('#node-input-mac');
 					});
             }
-            GetDevices(ip);
+            GetDevices();
             
+            $("#node-input-server").on("change",function(){
+                $("#node-input-lookup-devices").trigger('click');
+            })
+
             $("#node-input-lookup-devices").on("click",function(){
-                var ip = $('#node-input-srvaddress').val();
-                GetDevices(ip);
+                cfgid = $("#node-input-server").val();
+                $.getJSON('ampio/'+cfgid+'/devices/types',function(json){
+                    DevTypes = json;
+                });
+                GetDevices();
             });
         }
         
@@ -87,8 +95,8 @@
 
 <script type="text/x-red" data-template-name="Ampio LCD">
     <div class="form-row">
-        <label for="node-input-srvaddress"><i class="icon-tag"></i> Server address</label>
-        <input type="text" id="node-input-srvaddress">    
+        <label for="node-input-srvaddress"><i class="icon-tag"></i> Server</label>
+        <input type="text" id="node-input-server">    
         </input>
     </div>
     <div class="form-row">
@@ -133,7 +141,7 @@
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
 </script>
- 
+
 <script type="text/x-red" data-help-name="Ampio LCD">
     <p>Ampio node used to send strings and commands to Ampio MDOT-LCD modules.<br/>
     <h3>Inputs</h3>

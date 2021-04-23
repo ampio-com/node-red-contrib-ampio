@@ -50,6 +50,7 @@ exports.setup_node_status_from_mqtt_client = function(node) {
 }
 
 exports.hex2rgb565 = function (hexcol){
+    var leftPad = require('left-pad');
 	let r=hexcol.substring(0,2);
 	let g=hexcol.substring(2,4);
 	let b=hexcol.substring(4,6);

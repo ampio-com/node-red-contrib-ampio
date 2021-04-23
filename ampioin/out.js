@@ -1,23 +1,19 @@
 module.exports = function(RED) {
     function ampioout(config) {
         RED.nodes.createNode(this,config);
-        const node = this;
+        var node = this;
         au = require('../generic/ampio-utils');
 		node.mac = au.sanitize_mac(config.mac);
         node.ioid = au.sanitize_ioid(config.ioid);
         node.valtype = config.valtype;
-        node.srvaddress = config.srvaddress;
         
         const leftPad = require('left-pad');
-        node.client  = au.setup_mqtt_client(node, config)
+		node.ampioserv = config.server;
+        node.brokerConn = RED.nodes.getNode(node.ampioserv);
+		
 
-    	au.setup_node_status_from_mqtt_client(node)
-
-		node.client.on('connect', function () {
-            node.status({fill:"green",shape:"dot",text:"connected"});
-        })
 			
-        node.on("input", function(msg) {
+        node.on("input", function(msg,send,done) {
             if(msg.hasOwnProperty('valtype')){
                 var valtype2=msg.valtype;
             }
@@ -36,30 +32,46 @@ module.exports = function(RED) {
             else{
                 var ioid2=node.ioid;
             }
+
+			let topic = 'ampio/to/'+mac2;
+			let payload = msg.payload.toString()
+			let outmsg = {topic:topic,payload:payload}
+
             if(valtype2=='r'){
-                node.client.publish('ampio/to/'+mac2+'/raw',msg.payload.toString());
+				outmsg.topic = topic + '/raw';
             }
             else if(valtype2=='s'){
-                node.client.publish('ampio/to/'+mac2+'/o/'+ioid2+'/cmd',msg.payload.toString());
+				outmsg.topic = topic + '/o/'+ioid2+'/cmd'
             }
             else if(valtype2=='rs' || valtype2=='rsdn' || valtype2=='rm' || valtype2=='f'){
-                node.client.publish('ampio/to/'+mac2+'/' + valtype2 + '/'+ioid2+'/cmd',msg.payload.toString());
+				outmsg.topic = topic + '/' + valtype2 + '/'+ioid2+'/cmd';
             }
             else if(valtype2=='ir'){
-                var outMsg = '8206' + leftPad((Number(ioid2)-1).toString(16),2,'0');
-                node.client.publish('ampio/to/'+mac2+'/raw',outMsg);
+				outmsg.topic = topic + '/raw'
+                outmsg.payload = '8206' + leftPad((Number(ioid2)-1).toString(16),2,'0');
             }
             else{
-                node.client.publish('ampio/to/'+mac2+'/'+valtype2+'/'+ioid2+'/cmd',msg.payload.toString());
+				outmsg.topic = topic+ '/'+valtype2+'/'+ioid2+'/cmd';
             }
+
+			this.brokerConn.publish(outmsg, function(err) {
+				let args = arguments;
+				let l = args.length;
+				done(err);
+			});
+
+			done();
                 
         })
 
         node.on('close', function() {
-            // tidy up any state
-            node.client.end();
+            if (node.brokerConn) {
+                node.brokerConn.unsubscribe(node.topic,node.id, removed);
+                node.brokerConn.deregister(node,done);
+            }
         });
 
+		node.brokerConn.register(node);
     }
     RED.nodes.registerType("Ampio OUT",ampioout);
 
