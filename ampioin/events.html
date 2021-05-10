@@ -4,7 +4,7 @@
         color: '#d4d9db',
         defaults: {
             name: {value:""},
-            srvaddress: {value:"localhost"}
+            server: {type:"ampioconfig", required:true}
         },
         inputs:1,
         outputs:1,
@@ -18,8 +18,9 @@
 
 <script type="text/x-red" data-template-name="Ampio Events">
     <div class="form-row">
-        <label for="node-input-srvaddress"><i class="icon-tag"></i> Server address</label>
-        <input type="text" id="node-input-srvaddress" placeholder="localhost">
+        <label for="node-input-srvaddress"><i class="icon-tag"></i> Server</label>
+        <input type="text" id="node-input-server">    
+        </input>
     </div>
     <div class="form-row">
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
@@ -27,7 +28,7 @@
     </div>
     </script>
 </script>
- 
+
 <script type="text/x-red" data-help-name="Ampio Events">
     <p>Ampio node used to send and receive Events in Ampio Smart Home CAN network.<br/>
     <h3>Inputs</h3>
@@ -43,6 +44,10 @@
     <span class="property-type">string</span>
     </dt>
     <dd> number of event, that is annopunced in CAN Network. </dd>
+    <dt>EventSender
+    <span class="property-type">string</span>
+    </dt>
+    <dd> MAC address of device, that sends an event. </dd>
     </dl>
     
     <h3>Details</h3>
