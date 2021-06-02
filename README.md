@@ -21,6 +21,7 @@ Disclaimer: every version lower than 1.0.0 is considered as beta.
 
 ### 0.4.x
 0.4.0 - general update, modified backend to create only one, shared client for every MQTT broker, added config node, which gives possibility to store configurations of many brokers, updated list of device types. **Manual configuration update is required after update - you will need to go add broker configuration and select it in ever Ampio Node.**
+0.4.1 - bugfix, outputs were not visible for MIN-11p
 
 ### 0.3.x
 0.3.0 - Added functionality of loading input/output descriptions from modules.**Requires MQTT bridge in version 3.14 or later to support this functionality**; corrected encoding in module names<br>
