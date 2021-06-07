@@ -54,7 +54,18 @@
 					$('#node-input-mac').prop('disabled', false);
 					for (var i = 0; i< data.length; i++){
 						var dev = data[i];
-						$("<option value='" + dev.user_mac + "'> " + pad(dev.user_mac,4) + " - " + (DevTypes[dev.typ].type) + " (" + b64DecodeUnicode(dev.name) + ")</option>").appendTo('#node-input-mac');
+						try{
+                            if(DevTypes.hasOwnProperty(dev.typ) && DevTypes[dev.typ].hasOwnProperty('type')){
+                                $("<option value='" + dev.user_mac + "'> " + pad(dev.user_mac,4) + " - " + (DevTypes[dev.typ].type) + " (" + b64DecodeUnicode(dev.name) + ")</option>").appendTo('#node-input-mac');
+                            }
+                            else{
+                                $("<option value='" + dev.user_mac + "'> " + pad(dev.user_mac,4) + " - " + "Unknown type-" + dev.typ + " (" + b64DecodeUnicode(dev.name) + ")</option>").appendTo('#node-input-mac');
+                                throw "Unknown device type!";
+                            }
+                        }
+                        catch(e){
+                            console.error(e);
+                        }
 						var tempObj={};
 						tempObj.type = dev.typ;
 						tempObj.name = b64DecodeUnicode(dev.name);
