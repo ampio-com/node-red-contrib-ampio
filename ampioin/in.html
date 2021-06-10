@@ -21,6 +21,7 @@
             var DevTypes;
             var ValTypes;
             var VisDevices={};
+            let inoptions;
             let cfgid = $("#node-input-server").val();
 
             $.getJSON('ampio/'+cfgid+'/devices/types',function(json){
@@ -71,6 +72,7 @@
 						tempObj.name = b64DecodeUnicode(dev.name);
 						tempObj.soft = dev.soft_ver;
 						tempObj.rt=0;
+                        tempObj.protocol = dev.protocol;
 						
 						if(dev.hasOwnProperty("bi") && dev.hasOwnProperty("bo") && dev.hasOwnProperty("ai") && dev.hasOwnProperty("ao") && dev.hasOwnProperty("f")){
 							tempObj.bi = dev.bi;
@@ -119,7 +121,8 @@
            			bi:DevInfo.bi,
            			rt:DevInfo.rt,
            			f:DevInfo.f,
-           			valtype:valtype
+           			valtype:valtype,
+                    protocol:DevInfo.protocol
            			};
            		$.ajax({
 					url: 'ampio/'+cfgid+'/devices/desc/',
@@ -171,7 +174,10 @@
                 let mac = $('#node-input-mac').val()
                 if(VisDevices.hasOwnProperty(mac)){
                     if(DevTypes[VisDevices[mac].type].hasOwnProperty('inoptions')){
-                        let inoptions = DevTypes[VisDevices[mac].type].inoptions;
+                        inoptions = [...DevTypes[VisDevices[mac].type].inoptions];
+                        if(VisDevices[mac].protocol>=22){
+                            inoptions.push('afu8');
+                        }
                         let NodeValtypeExists = false;
                         for(let i = 0; i < inoptions.length; i++){
                             $("<option value='" + inoptions[i] + "'>" + ValTypes[inoptions[i]] + "</option>").appendTo('#node-input-valtype');

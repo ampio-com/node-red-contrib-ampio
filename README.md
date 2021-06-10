@@ -17,12 +17,13 @@ Basically, after installing you will have 4 add-ons:
 - Ampio Events, to send and/or receive events from your CAN Network. 
 
 ## Changelog
-Disclaimer: every version lower than 1.0.0 is considered as beta.
+Disclaimer: every version lower than 1.0.0 is considered as beta. I do all my best to make every release as stable as possible, but due to fast development of protocol, API changes may occur. 1.0.0 is planned after transition to /b/ MQTT broadcasts, which requires many changes. 
 
 ### 0.4.x
-0.4.2 - bugfix - unknown device type was crashing device list. Now this bug is handled. 
-0.4.1 - bugfix, outputs were not visible for MIN-11p
-0.4.0 - general update, modified backend to create only one, shared client for every MQTT broker, added config node, which gives possibility to store configurations of many brokers, updated list of device types. **Manual configuration update is required after update - you will need to go add broker configuration and select it in ever Ampio Node.**
+0.4.3 - fixed lack of support of linear flags in devices with protocol >= 22. <br>
+0.4.2 - bugfix - unknown device type was crashing device list. Now this bug is handled. <br>
+0.4.1 - bugfix, outputs were not visible for MIN-11p <br>
+0.4.0 - general update, modified backend to create only one, shared client for every MQTT broker, added config node, which gives possibility to store configurations of many brokers, updated list of device types. **Manual configuration update is required after update - you will need to go add broker configuration and select it in ever Ampio Node.** <br>
 
 
 ### 0.3.x

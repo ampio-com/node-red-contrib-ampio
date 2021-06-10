@@ -234,7 +234,7 @@ module.exports = function(RED) {
 
 
         
-
+        //DEVICES LIST
         RED.httpAdmin.get('/ampio/'+node_id+'/devices/list', RED.auth.needsPermission('ampio.read'),function(req,res){
             console.log('/ampio/'+node_id+'/devices/list');
             
@@ -295,7 +295,7 @@ module.exports = function(RED) {
 
         
         
-        
+        //DESCRIPTIONS
         RED.httpAdmin.get('/ampio/'+node_id+'/devices/desc', RED.auth.needsPermission('ampio.read'),function(req,res){
         
             let i = 0;
@@ -347,6 +347,10 @@ module.exports = function(RED) {
                     f: {
                     lim: req.query.f,
                     con: [6]
+                },
+                    afu8: {
+                    lim:6,
+                    con: [7]
                 },
                     rs: {
                     lim: req.query.rt,
@@ -462,7 +466,8 @@ module.exports = function(RED) {
                     ir: 32,
                     au: 18,
                     au16: 9,
-                    au32: 32
+                    au32: 32,
+                    afu8: 6
                 }
                 if(LimDict.hasOwnProperty(req.query.valtype)){
                     limit=LimDict[req.query.valtype];

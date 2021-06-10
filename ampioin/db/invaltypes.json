@@ -16,6 +16,7 @@
         "temp": "Temperature [*C]",
         "au": "Analog 8bit value",
         "au16": "Analog 16 bit value",
-        "au32": "Analog 32 bit value"
+        "au32": "Analog 32 bit value",
+        "afu8": "Analog flag"
     }
 

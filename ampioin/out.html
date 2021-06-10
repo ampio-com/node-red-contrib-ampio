@@ -21,6 +21,7 @@
             var DevTypes;
             var VisDevices={};
             var ValTypes;
+            let outoptions;
             let cfgid = $("#node-input-server").val();
 
             $.getJSON('ampio/'+cfgid+'/devices/types',function(json){
@@ -71,6 +72,7 @@
 						tempObj.name = b64DecodeUnicode(dev.name);
 						tempObj.soft = dev.soft_ver;
 						tempObj.rt=0;
+                        tempObj.protocol = dev.protocol;
 						
 						if(dev.hasOwnProperty("bi") && dev.hasOwnProperty("bo") && dev.hasOwnProperty("ai") && dev.hasOwnProperty("ao") && dev.hasOwnProperty("f")){
 							tempObj.bi = dev.bi;
@@ -119,7 +121,8 @@
            			bi:DevInfo.bi,
            			rt:DevInfo.rt,
            			f:DevInfo.f,
-           			valtype:valtype
+           			valtype:valtype,
+                    protocol:DevInfo.protocol
            			};
            		$.ajax({
 					url: 'ampio/'+cfgid+'/devices/desc/',
@@ -170,7 +173,10 @@
                 let mac = $('#node-input-mac').val()
                 if(VisDevices.hasOwnProperty(mac)){
 				  if(DevTypes[VisDevices[mac].type].hasOwnProperty('outoptions')){
-                        let outoptions = DevTypes[VisDevices[mac].type].outoptions;
+                        let outoptions = [...DevTypes[VisDevices[mac].type].outoptions];
+                        if(VisDevices[mac].protocol>=22){
+                            outoptions.push('afu8');
+                        }
                         let NodeValtypeExists = false;
                         for(let i = 0; i < outoptions.length; i++){
                             $("<option value='" + outoptions[i] + "'>" + ValTypes[outoptions[i]] + "</option>").appendTo('#node-input-valtype');
@@ -229,6 +235,7 @@
             <option value="rs">MRT set temperature</option>
             <option value="rsdn">Heat/cooling set day/night temperature</option>
             <option value="rm">Heating/cooling zone set mode</option>
+            <option value="afu8">Analog flag</option>
         </select>
     </div>
     <div class="form-row" style="display: none;" id="ioid">
@@ -245,7 +252,8 @@
 
     <script type="text/javascript">
         $("#node-input-valtype").change(function(){
-            var e = document.getElementById("node-input-valtype");
+            let e = document.getElementById("node-input-valtype");
+            console.log(e);
             if(e.options[e.selectedIndex].value!="r"){
                 document.getElementById("ioid").style.display = "block";
             }
