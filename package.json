@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-ampio",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Ampio node",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

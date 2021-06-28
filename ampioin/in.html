@@ -39,7 +39,7 @@
     			}
     			catch(e){
     				console.error("b64->UTF-8 error: " + atob(str))
-    				document.getElementById("legacymqtt").style.display = "block";
+    				//document.getElementById("legacymqtt").style.display = "block";
     				return atob(str);
     			}
 			}
@@ -133,7 +133,7 @@
 						for(i=0;i<data.length;i++){
 							if(i==0 && data[i]!=null){
 								$("<option value='" + i + "' disabled> " + atob(data[i]) + "</option>").appendTo('#node-input-ioid');
-								document.getElementById("legacymqtt").style.display = "block";
+								//document.getElementById("legacymqtt").style.display = "block";
 								legacy=true;
 								
 							}
@@ -165,7 +165,7 @@
                     DevTypes = json;
                 });
 
-            	document.getElementById("legacymqtt").style.display = "none";
+            	//document.getElementById("legacymqtt").style.display = "none";
                 GetDevices();
             });
             
@@ -247,9 +247,9 @@
         <label for="node-input-retainignore"><i class="icon-tag"></i> Ignore Retain Flag</label>
         <input type="checkbox" id="node-input-retainignore">
     </div>
-    <div class="form-tips" style='display: none' id='legacymqtt'>
+    <!--<div class="form-tips" style='display: none' id='legacymqtt'>
     	<b>Warning:</b> Please update MQTT bridge on your MSERV.
-    </div>
+    </div>-->
     
 </script>
 
