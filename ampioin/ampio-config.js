@@ -234,7 +234,7 @@ module.exports = function(RED) {
 
 
         
-
+        //DEVICES LIST
         RED.httpAdmin.get('/ampio/'+node_id+'/devices/list', RED.auth.needsPermission('ampio.read'),function(req,res){
             console.log('/ampio/'+node_id+'/devices/list');
             
@@ -243,7 +243,6 @@ module.exports = function(RED) {
                 return new Promise((resolve,reject) => {
                     try{
                         node.client.subscribe('ampio/from/can/dev/list', function (err) { //topic to subscribe
-                            console.log("GET subscribe")
                             if (!err) {
                                 node.client.publish('ampio/to/can/dev/list','');
                                 resolve(true); 
@@ -295,12 +294,13 @@ module.exports = function(RED) {
 
         
         
-        
+        //DESCRIPTIONS
         RED.httpAdmin.get('/ampio/'+node_id+'/devices/desc', RED.auth.needsPermission('ampio.read'),function(req,res){
         
             let i = 0;
             let dmac=req.query.mac;
 
+            console.log("Get descriptions");
             function btoa(data){
                 let buff = new Buffer.from(data, 'ascii');
                 let text = buff.toString('base64');
@@ -347,6 +347,10 @@ module.exports = function(RED) {
                     f: {
                     lim: req.query.f,
                     con: [6]
+                },
+                    afu8: {
+                    lim:6,
+                    con: [7]
                 },
                     rs: {
                     lim: req.query.rt,
@@ -462,7 +466,8 @@ module.exports = function(RED) {
                     ir: 32,
                     au: 18,
                     au16: 9,
-                    au32: 32
+                    au32: 32,
+                    afu8: 6
                 }
                 if(LimDict.hasOwnProperty(req.query.valtype)){
                     limit=LimDict[req.query.valtype];
