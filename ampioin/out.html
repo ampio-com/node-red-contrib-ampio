@@ -17,10 +17,12 @@
             return this.name||"Ampio OUT";
         },
         oneditprepare: function(){
+            console.log("oneditprepare");
             var node = this;
             var DevTypes;
             var VisDevices={};
             var ValTypes;
+            var request;
             let outoptions;
             let cfgid = $("#node-input-server").val();
 
@@ -39,7 +41,7 @@
     			}
     			catch(e){
     				console.error("b64->UTF-8 error: " + atob(str))
-    				document.getElementById("legacymqtt").style.display = "block";
+    				//document.getElementById("legacymqtt").style.display = "block";
     				return atob(str);
     			}
 			}
@@ -48,6 +50,7 @@
                 return str.length < max ? pad("0" + str, max) : str;
             }
             function GetDevices(){
+                console.log("get devices");
                 var ip = $('#node-input-srvaddress').val();
                 $("#node-input-mac").empty();
                 $.getJSON('ampio/'+cfgid+'/devices/list',{ip:ip})
@@ -124,7 +127,7 @@
            			valtype:valtype,
                     protocol:DevInfo.protocol
            			};
-           		$.ajax({
+           		request = $.ajax({
 					url: 'ampio/'+cfgid+'/devices/desc/',
 					data: params,
 					dataType: 'json',
@@ -133,7 +136,7 @@
 						for(i=0;i<data.length;i++){
 							if(i==0 && data[i]!=null){
 								$("<option value='" + i + "' disabled> " + atob(data[i]) + "</option>").appendTo('#node-input-ioid');
-								document.getElementById("legacymqtt").style.display = "block";
+								//document.getElementById("legacymqtt").style.display = "block";
 								legacy=true;
 								
 							}
@@ -154,17 +157,21 @@
 				});
 			};
 
-            $("#node-input-server").on("change",function(){
-                $("#node-input-lookup-devices").trigger('click');
-            })
+            /*$("#node-input-server").on("change",function(){
+                console.log("trigger " + $("#node-input-server").val())
+                if($("#node-input-server").val()!=undefined){
+                    $("#node-input-lookup-devices").trigger('click');
+                }
+            })*/
 
             GetDevices();
             $("#node-input-lookup-devices").on("click",function(){
+                console.log("lookup-clicked")
                 cfgid = $("#node-input-server").val();
                 $.getJSON('ampio/'+cfgid+'/devices/types',function(json){
                     DevTypes = json;
                 });
-            	document.getElementById("legacymqtt").style.display = "none";
+            	//document.getElementById("legacymqtt").style.display = "none";
                 GetDevices();
             });
 
@@ -197,9 +204,11 @@
             });
             
             $('#node-input-valtype').on('change', function(){
-            	if($("#node-input-mac").val()!==null){
+            	if($("#node-input-mac").val()!==null && $("#node-input-valtype").val()!==null){
             		$("#node-input-ioid").empty();
+                    
             		GetDesc();
+                    console.log("GetDesc")
             	};
             	
             });
@@ -246,14 +255,14 @@
         <label for="node-input-name"><i class="icon-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
-    <div class="form-tips" style='display: none' id='legacymqtt'>
+    <!--<div class="form-tips" style='display: none' id='legacymqtt'>
     	<b>Warning:</b> Please update MQTT bridge on your MSERV.
-    </div>
+    </div>-->
 
     <script type="text/javascript">
         $("#node-input-valtype").change(function(){
             let e = document.getElementById("node-input-valtype");
-            console.log(e);
+            //console.log(e);
             if(e.options[e.selectedIndex].value!="r"){
                 document.getElementById("ioid").style.display = "block";
             }

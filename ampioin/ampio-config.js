@@ -243,7 +243,6 @@ module.exports = function(RED) {
                 return new Promise((resolve,reject) => {
                     try{
                         node.client.subscribe('ampio/from/can/dev/list', function (err) { //topic to subscribe
-                            console.log("GET subscribe")
                             if (!err) {
                                 node.client.publish('ampio/to/can/dev/list','');
                                 resolve(true); 
@@ -301,6 +300,7 @@ module.exports = function(RED) {
             let i = 0;
             let dmac=req.query.mac;
 
+            console.log("Get descriptions");
             function btoa(data){
                 let buff = new Buffer.from(data, 'ascii');
                 let text = buff.toString('base64');
