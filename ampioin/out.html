@@ -17,7 +17,7 @@
             return this.name||"Ampio OUT";
         },
         oneditprepare: function(){
-            console.log("oneditprepare");
+            //console.log("oneditprepare");
             var node = this;
             var DevTypes;
             var VisDevices={};
@@ -50,7 +50,7 @@
                 return str.length < max ? pad("0" + str, max) : str;
             }
             function GetDevices(){
-                console.log("get devices");
+                //console.log("get devices");
                 var ip = $('#node-input-srvaddress').val();
                 $("#node-input-mac").empty();
                 $.getJSON('ampio/'+cfgid+'/devices/list',{ip:ip})
@@ -166,7 +166,7 @@
 
             GetDevices();
             $("#node-input-lookup-devices").on("click",function(){
-                console.log("lookup-clicked")
+                //console.log("lookup-clicked")
                 cfgid = $("#node-input-server").val();
                 $.getJSON('ampio/'+cfgid+'/devices/types',function(json){
                     DevTypes = json;
@@ -208,7 +208,7 @@
             		$("#node-input-ioid").empty();
                     
             		GetDesc();
-                    console.log("GetDesc")
+                    //console.log("GetDesc")
             	};
             	
             });
