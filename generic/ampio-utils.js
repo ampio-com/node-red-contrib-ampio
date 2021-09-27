@@ -64,6 +64,6 @@ exports.hex2rgb565 = function (hexcol){
 	let b5 = b>>3;
 
 	let rgb565 = r5<<11 | g6<<5 | b5;
-	rgb565 = leftPad(rgb565.toString(16),4,'0');
-	return rgb565.toUpperCase()
+	let rgb565s = leftPad(rgb565.toString(16),4,'0');
+	return rgb565s.toUpperCase();
 }
