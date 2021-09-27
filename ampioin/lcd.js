@@ -43,7 +43,7 @@ module.exports = function(RED) {
                 }
             }
             else if(msg.payload.hasOwnProperty('square')){
-                outstr = outstr + "04" + leftPad(msg.payload.square.x1.toString(16),2,'0') + leftPad(msg.payload.square.y1.toString(16),2,'0') + leftPad(msg.payload.square.x2.toString(16),2,'0') + leftPad(msg.payload.square.y2.toString(16),2,'0') + hex2rgb565(msg.payload.square.col).toUpperCase();
+                outstr = outstr + "04" + leftPad(msg.payload.square.x1.toString(16),2,'0') + leftPad(msg.payload.square.y1.toString(16),2,'0') + leftPad(msg.payload.square.x2.toString(16),2,'0') + leftPad(msg.payload.square.y2.toString(16),2,'0') + au.hex2rgb565(msg.payload.square.col).toUpperCase();
             }
             else if(typeof msg.payload === ('string' || 'number')){
                 msg = msg.payload.toString();
