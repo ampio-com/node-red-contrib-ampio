@@ -20,6 +20,7 @@ Basically, after installing you will have 4 add-ons:
 Disclaimer: every version lower than 1.0.0 is considered as beta. I do all my best to make every release as stable as possible, but due to fast development of protocol, API changes may occur. 1.0.0 is planned after transition to /b/ MQTT broadcasts, which requires many changes. 
 
 ### 0.4.x
+0.4.5 - fixed LCD node
 0.4.4 - fixed an issue, when user opened node parameters, deviced list was being generated 3 times, which sometimes resulted in tripled outputs list. Removed faulty "update MQTT" warnings.<br>
 0.4.3 - fixed lack of support of linear flags in devices with protocol >= 22. <br>
 0.4.2 - bugfix - unknown device type was crashing device list. Now this bug is handled. <br>
