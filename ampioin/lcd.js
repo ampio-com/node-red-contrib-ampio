@@ -27,13 +27,14 @@ module.exports = function(RED) {
         if(node.lcdbackcolor[0]=='#'){
             node.lcdbackcolor=node.lcdcharcolor.substring(1);
         }
-        var crgb565 = au.hex2rgb565(node.lcdcharcolor);
-        var brgb565 = au.hex2rgb565(node.lcdbackcolor);
 
         node.on("input", function(msg,send,done) {
 
             var outstr = "2901";
             
+            var crgb565 = au.hex2rgb565(node.lcdcharcolor);
+            var brgb565 = au.hex2rgb565(node.lcdbackcolor);
+                
             if(msg.payload.hasOwnProperty('brightness')){
                 outstr = outstr + "02" + leftPad(msg.payload.brightness.toString(16),2,'0');
             }
@@ -55,7 +56,7 @@ module.exports = function(RED) {
                 }
                 let msglen = msg.length;
                 var restofmsg = leftPad(msglen.toString(16),2,'0') + Buffer.from(msg,'utf-8').toString('hex');
-                outstr = outstr + node.lcdfont + node.lcdxpos + node.lcdypos + crgb565 + brgb565 + leftPad(msglen.toString(16),2,'0') + Buffer.from(msg,'utf-8').toString('hex');
+                outstr = outstr + node.lcdfont + au.decStrToHexStr(node.lcdxpos) + au.decStrToHexStr(node.lcdypos) + crgb565 + brgb565 + leftPad(msglen.toString(16),2,'0') + Buffer.from(msg,'utf-8').toString('hex');
             }
             //node.client.publish('ampio/to/'+mac+'/raw',outstr);
             
@@ -84,5 +85,3 @@ module.exports = function(RED) {
     }
     RED.nodes.registerType("Ampio LCD",ampiolcd);
 };
-
-
