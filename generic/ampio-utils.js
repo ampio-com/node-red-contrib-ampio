@@ -64,6 +64,17 @@ exports.hex2rgb565 = function (hexcol){
 	let b5 = b>>3;
 
 	let rgb565 = r5<<11 | g6<<5 | b5;
+
+    let byte_h = (rgb565 >> 8) & 0xFF;
+    let byte_l = (rgb565 >> 0) & 0xFF;
+    rgb565 = byte_l << 8 | byte_h;
+
 	let rgb565s = leftPad(rgb565.toString(16),4,'0');
+
 	return rgb565s.toUpperCase();
+}
+
+exports.decStrToHexStr = function (dec_str) {
+    const val = parseInt(dec_str, 10);
+    return val.toString(16).padStart(2, '0');
 }
