@@ -19,6 +19,9 @@ Basically, after installing you will have 4 add-ons:
 ## Changelog
 Disclaimer: every version lower than 1.0.0 is considered as beta. I do all my best to make every release as stable as possible, but due to fast development of protocol, API changes may occur. 1.0.0 is planned after transition to /b/ MQTT broadcasts, which requires many changes. 
 
+### 0.5.x
+0.5.0 - add support for M-DOT-M18
+
 ### 0.4.x
 0.4.5 - fixed LCD node.<br>
 0.4.4 - fixed an issue, when user opened node parameters, deviced list was being generated 3 times, which sometimes resulted in tripled outputs list. Removed faulty "update MQTT" warnings.<br>
