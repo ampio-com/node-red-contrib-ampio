@@ -54,7 +54,7 @@
 						$('#node-input-mac').prop('disabled', false);
 						for (var i = 0; i< data.length; i++){
 							let dev = data[i];
-							if(dev.typ == 27 || dev.typ == 32 || dev.typ == 51 || dev.typ == 52){
+							if(dev.typ == 27 || dev.typ == 32 || dev.typ == 51 || dev.typ == 52 || dev.typ == 68){
 								$("<option value='" + dev.user_mac + "'> " + pad(dev.user_mac,4) + " - " + (DevTypes[dev.typ].type) + " (" + b64DecodeUnicode(dev.name) + ")</option>").appendTo('#node-input-mac');
 								let tempObj={};
 								tempObj.type = dev.typ;
