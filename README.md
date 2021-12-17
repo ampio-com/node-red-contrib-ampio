@@ -20,6 +20,7 @@ Basically, after installing you will have 4 add-ons:
 Disclaimer: every version lower than 1.0.0 is considered as beta. I do all my best to make every release as stable as possible, but due to fast development of protocol, API changes may occur. 1.0.0 is planned after transition to /b/ MQTT broadcasts, which requires many changes. 
 
 ### 0.5.x
+0.5.1 - Update devtypes.json
 0.5.0 - add support for M-DOT-M18
 
 ### 0.4.x
