@@ -18,7 +18,7 @@
     },
     {
        "value":1,
-       "type":"MIN-4p",
+       "type":"M-IN-4p",
        "inoptions":[
           "i",
           "re",
@@ -32,7 +32,7 @@
     },
     {
        "value":2,
-       "type":"MPR-1p",
+       "type":"M-REL-1p",
        "inoptions":[
           "o",
           "i",
@@ -48,7 +48,7 @@
     },
     {
        "value":3,
-       "type":"MROL-4s",
+       "type":"M-ROL-4s",
        "inoptions":[
           "o",
           "i",
@@ -64,7 +64,7 @@
     },
     {
        "value":4,
-       "type":"MPR-8s",
+       "type":"M-REL-8s",
        "inoptions":[
           "o",
           "i",
@@ -80,7 +80,7 @@
     },
     {
        "value":5,
-       "type":"MDIM-8s",
+       "type":"M-DIM-8s",
        "inoptions":[
           "a",
           "o",
@@ -94,7 +94,7 @@
     },
     {
        "value":6,
-       "type":"MAMP-1s",
+       "type":"M-AV-AMP-s",
        "inoptions":[
           "f"
        ],
@@ -105,11 +105,11 @@
     },
     {
        "value":7,
-       "type":"ZAR. (unsupported)"
+       "type":"RES. (unsupported)"
     },
     {
        "value":8,
-       "type":"MDOT-4",
+       "type":"M-DOT-4",
        "inoptions":[
           "i",
           "re",
@@ -124,7 +124,7 @@
     },
     {
        "value":9,
-       "type":"MDOT-18",
+       "type":"M-DOT-18",
        "inoptions":[
           "i",
           "re",
@@ -139,7 +139,7 @@
     },
     {
        "value":10,
-       "type":"MSERV-3s",
+       "type":"M-SERV-s",
        "inoptions":[
           "o",
           "i",
@@ -155,7 +155,7 @@
     },
     {
        "value":11,
-       "type":"MDOT-9",
+       "type":"M-DOT-9",
        "inoptions":[
           "i",
           "re",
@@ -170,7 +170,7 @@
     },
     {
        "value":12,
-       "type":"MRGBu-1",
+       "type":"M-OC-4s",
        "inoptions":[
           "a",
           "rgbw",
@@ -184,7 +184,7 @@
     },
     {
        "value":13,
-       "type":"MDIM-4",
+       "type":"M-DIM-4s",
        "inoptions":[
           "a",
           "o",
@@ -198,7 +198,7 @@
     },
     {
        "value":14,
-       "type":"MINOC-8",
+       "type":"M-INOC-8s",
        "inoptions":[
           "a",
           "o",
@@ -214,7 +214,7 @@
     },
     {
        "value":15,
-       "type":"MIN-8s",
+       "type":"M-IN-8s",
        "inoptions":[
           "i",
           "re",
@@ -228,7 +228,7 @@
     },
     {
        "value":16,
-       "type":"MRTC-1s",
+       "type":"M-RTC-s",
        "inoptions":[
           "f"
        ],
@@ -240,7 +240,7 @@
     },
     {
        "value":17,
-       "type":"MLED-1",
+       "type":"M-LED-1",
        "inoptions":[
           "a",
           "o",
@@ -254,7 +254,7 @@
     },
     {
        "value":18,
-       "type":"MDIM-1",
+       "type":"M-DIM-1s",
        "inoptions":[
           "a",
           "o",
@@ -268,7 +268,7 @@
     },
     {
        "value":19,
-       "type":"MRT-1s",
+       "type":"M-RT-s",
        "inoptions":[
           "f",
           "rs"
@@ -284,7 +284,7 @@
     },
     {
        "value":20,
-       "type":"MRT-4s",
+       "type":"M-RT-s",
        "inoptions":[
           "f",
           "rs"
@@ -300,7 +300,7 @@
     },
     {
        "value":21,
-       "type":"MRT-8s",
+       "type":"M-RT-s",
        "inoptions":[
           "f",
           "rs"
@@ -316,7 +316,7 @@
     },
     {
        "value":22,
-       "type":"MRT-16s",
+       "type":"M-RT-s",
        "inoptions":[
           "f",
           "rs"
@@ -332,7 +332,7 @@
     },
     {
        "value":23,
-       "type":"MRT-32s",
+       "type":"M-RT-s",
        "inoptions":[
           "f",
           "rs"
@@ -348,7 +348,7 @@
     },
     {
        "value":24,
-       "type":"MPR-2",
+       "type":"M-REL-2",
        "inoptions":[
            "i",
            "re",
@@ -364,7 +364,7 @@
     },
     {
        "value":25,
-       "type":"MCON",
+       "type":"M-CON-s",
        "inoptions":[
           "f",
           "au",
@@ -378,7 +378,7 @@
     },
     {
        "value":26,
-       "type":"MOC-4",
+       "type":"M-INOC-4p",
        "inoptions":[
           "a",
           "o",
@@ -392,7 +392,7 @@
     },
     {
        "value":27,
-       "type":"MDOT-15LCD",
+       "type":"M-DOT-15LCD",
        "inoptions":[
           "i",
           "re",
@@ -407,7 +407,7 @@
     },
     {
        "value":28,
-       "type":"MINAC-8s",
+       "type":"M-IN-AC4s",
        "inoptions":[
           "i",
           "re",
@@ -421,7 +421,7 @@
     },
     {
        "value":29,
-       "type":"MINAD-8s",
+       "type":"M-IN-AD8s",
        "inoptions":[
           "ai",
           "f"
@@ -433,11 +433,11 @@
     },
     {
        "value":30,
-       "type":"MNAD-IR (unsupported)"
+       "type":"M-CON-IR (unsupported)"
     },
     {
        "value":31,
-       "type":"MROL-1",
+       "type":"M-ROL-1",
        "inoptions":[
           "o",
           "i",
@@ -452,7 +452,7 @@
     },
     {
        "value":32,
-       "type":"MDOT-6LCD",
+       "type":"M-DOT-6",
        "inoptions":[
           "i",
           "re",
@@ -467,7 +467,7 @@
     },
     {
        "value":33,
-       "type":"MDOT-2",
+       "type":"M-DOT-2",
        "inoptions":[
           "i",
           "re",
@@ -482,7 +482,7 @@
     },
     {
        "value":34,
-       "type":"METEO-1s",
+       "type":"M-METEO",
        "inoptions":[
           "f"
        ],
@@ -493,7 +493,7 @@
     },
     {
        "value":35,
-       "type":"MCON-CAN",
+       "type":"M-CON-CAN-s",
        "inoptions":[
           "f"
        ],
@@ -504,7 +504,7 @@
     },
     {
        "value":36,
-       "type":"MGES-1",
+       "type":"M-DOT-GEST",
        "inoptions":[
           "i",
           "re",
@@ -518,7 +518,7 @@
     },
     {
        "value":37,
-       "type":"MZWAVE",
+       "type":"M-CON-ZWAVE-s",
        "inoptions":[
           "f"
        ],
@@ -530,7 +530,7 @@
     },
     {
        "value":38,
-       "type":"MRDN-1s",
+       "type":"M-RDN-5s",
        "inoptions":[
           "f"
        ],
@@ -542,7 +542,7 @@
     },
     {
        "value":39,
-       "type":"MOUT-4s",
+       "type":"M-OUT-4s",
        "inoptions":[
           "f"
        ],
@@ -554,7 +554,7 @@
     },
     {
        "value":40,
-       "type":"MIN-11p",
+       "type":"M-IN-11p",
        "inoptions":[
           "i",
           "re",
@@ -569,7 +569,7 @@
     },
     {
        "value":41,
-       "type":"MOC-32s",
+       "type":"M-OC-32s",
        "inoptions":[
           "o",
           "f"
@@ -582,7 +582,7 @@
     },
     {
        "value":42,
-       "type":"MIN-16s",
+       "type":"M-IN-16s",
        "inoptions":[
           "i",
           "re",
@@ -595,7 +595,7 @@
     },
     {
        "value":43,
-       "type":"MDALI-1s",
+       "type":"M-CON-DALI-s",
        "inoptions":[
           "a",
           "o",
@@ -609,7 +609,7 @@
     },
     {
        "value":44,
-       "type":"MULTISENS",
+       "type":"M-SENS",
        "inoptions":[
           "f",
           "hum",
@@ -628,18 +628,18 @@
     },
     {
        "value":45,
-       "type":"MSMOG (unsupported)"
+       "type":"M-SMOG (unsupported)"
     },
     {
        "value":46,
-       "type":"MAmpio1WGW (unsupported)",
+       "type":"M-Ampio1WGW (unsupported)",
        "inoptions":[
           "f"
        ]
     },
     {
        "value":47,
-       "type":"MKNX",
+       "type":"M-CON-KNX-s",
        "inoptions":[
           "f"
        ],
@@ -671,7 +671,7 @@
     },
     {
        "value":51,
-       "type":"MDOT-M4",
+       "type":"M-DOT-M4",
        "inoptions":[
           "i",
           "re",
@@ -686,7 +686,7 @@
     },
     {
        "value":52,
-       "type":"MDOT-M14",
+       "type":"M-DOT-M14",
        "inoptions":[
           "i",
           "re",
@@ -705,7 +705,7 @@
     },
     {
        "value":54,
-       "type":"MPT",
+       "type":"M-IN-PTK",
        "inoptions":[
           "f"
        ],
@@ -716,7 +716,7 @@
     },
     {
        "value":55,
-       "type":"MIN16OC8",
+       "type":"M-INOC-8s",
        "inoptions":[
           "a",
           "o",
@@ -732,7 +732,7 @@
     },
     {
        "value":56,
-       "type":"MMP3PLAY",
+       "type":"M-AV-MP3-s",
        "inoptions":[
           "f"
        ],
@@ -744,7 +744,7 @@
     },
     {
        "value":57,
-       "type":"MDOT-4RFID",
+       "type":"M-DOT-4-RFID",
        "inoptions":[
           "i",
           "re",
@@ -779,7 +779,7 @@
     },
     {
        "value":60,
-       "type":"MDOT-M15",
+       "type":"M-DOT-M15",
        "inoptions":[
          "i",
          "re",
@@ -794,7 +794,7 @@
     },
     {
        "value":61,
-       "type":"MULTIROOM",
+       "type":"M-ROOM-s",
        "inoptions":[
          "o",
          "i",
@@ -810,7 +810,7 @@
     },
     {
        "value":62,
-       "type":"MREL-10",
+       "type":"M-REL-10s",
        "inoptions":[
          "o",
          "i",
@@ -826,7 +826,7 @@
     },
     {
        "value":63,
-       "type":"MENOCEAN",
+       "type":"M-CON-ENOCN-p",
        "inoptions":[
           "f"
        ],
@@ -836,7 +836,7 @@
     },
     {
        "value":64,
-       "type":"MDOT-M4",
+       "type":"M-DOT-M4",
        "inoptions":[
           "i",
           "re",
@@ -861,7 +861,7 @@
    },
    {
       "value":66,
-      "type":"MALARM",
+      "type":"M-ALARM-8s",
       "inoptions":[
          "f"
       ],
@@ -881,7 +881,7 @@
    },
    {
       "value":68,
-      "type":"MDOT-M18",
+      "type":"M-DOT-M18",
       "inoptions":[
         "i",
         "re",
@@ -896,7 +896,7 @@
    },
    {
       "value":69,
-      "type":"MDIM-2s",
+      "type":"M-DIM-2s",
       "inoptions":[
          "a",
          "o",
@@ -904,6 +904,19 @@
       ],
       "outoptions":[
          "s",
+         "r",
+         "f"
+      ]
+   },
+   {
+      "value":70,
+      "type":"M-IN-2p",
+      "inoptions":[
+         "i",
+		 "re",
+         "f"
+      ],
+      "outoptions":[
          "r",
          "f"
       ]
