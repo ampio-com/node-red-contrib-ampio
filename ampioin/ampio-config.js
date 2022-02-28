@@ -2,6 +2,12 @@ module.exports = function(RED) {
     "use strict";
     
     const mqtt = require('mqtt');
+    const net = require("net");
+
+    function unixSocketConnectionBuilder(client, opts) {
+        return net.createConnection(opts.pathname);
+    }
+
     let node_global={};
     function ampioconfig(config){
     
@@ -52,7 +58,12 @@ module.exports = function(RED) {
         if(!node.port || node.port === ""){
             node.port = '1883';
         }
-        node.brokerurl = "mqtt://" + node.server + ":" + node.port;
+        if (!node.server || node.server === "") {
+            node.brokerurl = "mqtt+unix:///var/run/ampio/mqtt.sock";
+            node.options.pathname = "/var/run/ampio/mqtt.sock";
+        } else {
+            node.brokerurl = "mqtt://" + node.server + ":" + node.port;
+        }
         console.log(node.brokerurl)
         this.options.clientId = 'AmpioNode_' + (1+Math.random()*4294967295).toString(16);
         node.options.clean = true;
@@ -96,7 +107,19 @@ module.exports = function(RED) {
                 node.connecting = true;
                 try{
                     //node.client = null;
-                    node.client = mqtt.connect(node.brokerurl,node.options);
+                    if (!node.server || node.server === "") {
+                        node.client = new mqtt.MqttClient(function (client) {
+                            return unixSocketConnectionBuilder(
+                                client,
+                                client.options
+                            );
+                        }, node.options);
+                    } else {
+                        node.client = mqtt.connect(
+                            node.brokerurl,
+                            node.options
+                        );
+                    }
                     node.client.setMaxListeners(0);
 
                     //handle connect event, update node statuses

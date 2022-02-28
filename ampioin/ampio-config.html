@@ -14,6 +14,10 @@
                 <label for="node-config-input-port" style="margin-left:20px; width:43px; "> Port</label>
                 <input type="text" id="node-config-input-port" placeholder="default: 1883" style="width:55px">
             </div>
+            <div class="form-tips">
+                To connect to the local M-SERV interface, leave the server field empty.<br><br>
+                Aby połączyć się z lokalnym interfejsem M-SERV, pozostaw pole serwera puste.
+            </div>
             <div class="form-tips" id='warning'>
                 <b>Notice:</b> After adding new config or changing settings, <b>Deploy</b> your configuration to see list of devices. Without this step, devices list won't show up.<br><br>
                 <b>Uwaga:</b> Dodając nową konfigurację serwera lub zmieniajac aktualną, zrób <b>Deploy</b> projektu, aby zobaczyć listę urządzeń. Do momentu deployowania lista urządzeń nie wczyta się. 
@@ -38,7 +42,7 @@
         category: 'config',
         defaults: {
             name: {value:""},
-            server: {value:"",required:true},
+            server: {value:""},
             port: {value:1883,required:false,validate:RED.validators.number(true)},
         },
         credentials: {
