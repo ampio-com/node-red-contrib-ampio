@@ -20,8 +20,8 @@
   },
   "author": "Ampio Sp. z o.o.",
   "license": "ISC",
-  "homepage": "http://github.com/ampiosmarthome/node-red-contrib-ampio#readme",
-  "repository": "github:ampiosmarthome/node-red-contrib-ampio",
+  "homepage": "https://github.com/ampio-com/node-red-contrib-ampio",
+  "repository": "github:ampio-com/node-red-contrib-ampio",
   "dependencies": {
     "left-pad": "^1.3.0",
     "mqtt": "^4.2.6"
