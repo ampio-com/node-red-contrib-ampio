@@ -20,6 +20,7 @@ Basically, after installing you will have 4 add-ons:
 Disclaimer: every version lower than 1.0.0 is considered as beta. I do all my best to make every release as stable as possible, but due to fast development of protocol, API changes may occur. 1.0.0 is planned after transition to /b/ MQTT broadcasts, which requires many changes.
 
 ### 0.6.x
+0.6.3 - device list bug fix
 0.6.2 - no changes<br>
 0.6.1 - no changes<br>
 0.6.0 - local unix-socket based connection option added

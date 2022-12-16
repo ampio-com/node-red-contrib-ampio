@@ -851,7 +851,7 @@
     },
     {
       "value":65,
-      "type":"UNKNOWN",
+      "type":"M-ALARM-8s",
       "inoptions":[
          "f"
       ],
@@ -871,7 +871,7 @@
    },
    {
       "value":67,
-      "type":"UNKNOWN",
+      "type":"M-CON-WL-p",
       "inoptions":[
          "f"
       ],
@@ -918,6 +918,77 @@
       ],
       "outoptions":[
          "r",
+         "f"
+      ]
+   },
+   {
+      "value":71,
+      "type":"RF-MESH",
+      "inoptions":[
+         "f"
+      ],
+      "outoptions":[
+         "f"
+      ]
+   },
+   {
+      "value":72,
+      "type":"M-REL-C4s",
+      "inoptions":[
+         "o",
+         "i",
+         "re",
+         "f",
+         "t"
+      ],
+      "outoptions":[
+         "s",
+         "r",
+         "f"
+      ]
+   },
+   {
+      "value":73,
+      "type":"M-DOT-R14",
+      "inoptions":[
+         "i",
+         "re",
+         "t",
+         "f"
+      ],
+      "outoptions":[
+         "s",
+         "r",
+         "f"
+      ]
+   },
+   {
+      "value":74,
+      "type":"sLEDu",
+      "inoptions":[
+         "f"
+      ],
+      "outoptions":[
+         "f"
+      ]
+   },
+   {
+      "value":75,
+      "type":"sLEDi",
+      "inoptions":[
+         "f"
+      ],
+      "outoptions":[
+         "f"
+      ]
+   },
+   {
+      "value":76,
+      "type":"UNDEFINED",
+      "inoptions":[
+         "f"
+      ],
+      "outoptions":[
          "f"
       ]
    }
