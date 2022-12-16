@@ -3,10 +3,10 @@ Ampio add-on made to use Ampio Smart Home devices in Node-RED.
 
 ## Pre-requisites
 You need Ampio Smart Home system, because this module is meant only to integrate it with another node-red plugins.
-You also need MSERV with latest firmware, or Ampio Smart Home server installed in docker and connected through special serial-CAN adapter with Docker host device.
+You also need M-SERV-s with latest firmware, or Ampio Smart Home server installed in docker and connected through special serial-CAN adapter with Docker host device.
 
 ## Install
-This node should be pre-installed on your MSERV. In case of having software in Docker, use MENU -> Manage Palette -> Install and type ampio. Another way is to use Terminal, and installing this add-on in your ~/.node-red directory.]
+This node should be pre-installed on your M-SERV-s. In case of having software in Docker, use MENU -> Manage Palette -> Install and type ampio. Another way is to use Terminal, and installing this add-on in your ~/.node-red directory.]
 
 ## Using this add-on
 After having this module installed, you will see helpful instructions in Help sections.
@@ -20,7 +20,7 @@ Basically, after installing you will have 4 add-ons:
 Disclaimer: every version lower than 1.0.0 is considered as beta. I do all my best to make every release as stable as possible, but due to fast development of protocol, API changes may occur. 1.0.0 is planned after transition to /b/ MQTT broadcasts, which requires many changes.
 
 ### 0.6.x
-0.6.3 - device list bug fix
+0.6.3 - device list bug fix<br>
 0.6.2 - no changes<br>
 0.6.1 - no changes<br>
 0.6.0 - local unix-socket based connection option added
