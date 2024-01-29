@@ -462,12 +462,11 @@ module.exports = function(RED) {
                 let f=req.query.f;
                 
                 if(bo==32 && ao==16 && bi==40 && ai==8){
-                WarningMessage=btoa("Legacy mode: Update your MQTT bridge on MSERV!");
-                console.log("Error loading descriptions data from MSERV. It seems, you may have MQTT Bridge older than v3.7. Go to MSERV web panel and update Ampio software.")
+                console.log("Error loading descriptions data from MSERV.")
             }
             else if(bo==0 && ao==0 && bi==0 && ai==0){
                 WarningMessage=btoa("Update MQTT Bridge on your MSERV!");
-                console.log("It seems you have MQTT Bridge v3.3-3.6, which had descriptions functionality in beta version. Upgrade it by MSERV web panel.")
+                console.log("It seems you have MQTT Bridge v3.3-3.6, which had descriptions functionality in beta version. Upgrade it by MSERV web panel or in Ampio Designer.")
                 bo=8;
                 bi=8;
                 ai=8;
