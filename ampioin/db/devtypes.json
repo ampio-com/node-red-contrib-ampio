@@ -964,7 +964,7 @@
    },
    {
       "value":74,
-      "type":"sLEDu",
+      "type":"M-CON-KEY-p",
       "inoptions":[
          "f"
       ],
@@ -974,7 +974,7 @@
    },
    {
       "value":75,
-      "type":"sLEDi",
+      "type":"M-CON-WZ-p",
       "inoptions":[
          "f"
       ],
@@ -984,7 +984,42 @@
    },
    {
       "value":76,
-      "type":"UNDEFINED",
+      "type":"M-CON-HVAC-p",
+      "inoptions":[
+         "f"
+      ],
+      "outoptions":[
+         "f"
+      ]
+   },
+   {
+      "value":77,
+      "type":"M-DOT-T6",
+      "inoptions":[
+         "i",
+         "re",
+         "t",
+         "f"
+      ],
+      "outoptions":[
+         "s",
+         "r",
+         "f"
+      ]
+   },
+   {
+      "value":78,
+      "type":"TYP78",
+      "inoptions":[
+         "f"
+      ],
+      "outoptions":[
+         "f"
+      ]
+   },
+   {
+      "value":79,
+      "type":"TYP79",
       "inoptions":[
          "f"
       ],
