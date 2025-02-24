@@ -994,6 +994,16 @@
    },
    {
       "value":77,
+      "type":"M-IN-IMP-4s",
+      "inoptions":[
+         "f"
+      ],
+      "outoptions":[
+         "f"
+      ]
+   },
+   {
+      "value":78,
       "type":"M-DOT-T6",
       "inoptions":[
          "i",
@@ -1008,7 +1018,7 @@
       ]
    },
    {
-      "value":78,
+      "value":79,
       "type":"TYP78",
       "inoptions":[
          "f"
@@ -1018,8 +1028,18 @@
       ]
    },
    {
-      "value":79,
-      "type":"TYP79",
+      "value":80,
+      "type":"TYP80",
+      "inoptions":[
+         "f"
+      ],
+      "outoptions":[
+         "f"
+      ]
+   },
+   {
+      "value":81,
+      "type":"TYP81",
       "inoptions":[
          "f"
       ],
