@@ -1019,7 +1019,7 @@
    },
    {
       "value":79,
-      "type":"TYP78",
+      "type":"M-DOT-R PRO",
       "inoptions":[
          "f"
       ],
@@ -1029,11 +1029,14 @@
    },
    {
       "value":80,
-      "type":"TYP80",
+      "type":"M-DOT-R2 PRO",
       "inoptions":[
-         "f"
+          "i",
+          "re",
+          "f"
       ],
       "outoptions":[
+         "s",
          "f"
       ]
    },
@@ -1046,5 +1049,25 @@
       "outoptions":[
          "f"
       ]
+   },
+   {
+      "value":82,
+      "type":"TYP81",
+      "inoptions":[
+         "f"
+      ],
+      "outoptions":[
+         "f"
+      ]
+   },
+   {
+      "value":83,
+      "type":"TYP81",
+      "inoptions":[
+         "f"
+      ],
+      "outoptions":[
+         "f"
+      ]
    }
- ]
+]
