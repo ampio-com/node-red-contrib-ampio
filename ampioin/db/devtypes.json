@@ -618,6 +618,7 @@
           "db",
           "lux",
           "iaq",
+          "co2",
           "temp"
        ],
        "outoptions":[

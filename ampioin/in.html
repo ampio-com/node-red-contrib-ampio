@@ -196,7 +196,14 @@
             });
             $('#node-input-valtype').on('change', function(){
                 let valuetype = $('#node-input-valtype').val();
-                if(valuetype == 'hum' || valuetype == 'absp' || valuetype == 'relp' || valuetype == 'db' || valuetype == 'lux' || valuetype == 'iaq' || valuetype == 'temp'){
+                if(valuetype == 'hum'  ||
+                   valuetype == 'absp' ||
+                   valuetype == 'relp' ||
+                   valuetype == 'db'   || 
+                   valuetype == 'lux'  || 
+                   valuetype == 'iaq'  || 
+                   valuetype == 'temp' ||
+                   valuetype == 'co2') {
                     $('#ioid').hide();
                     //document.getElementById("ioid").style.display = "none";
                 }

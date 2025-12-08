@@ -45,6 +45,10 @@ module.exports = function(RED) {
                 node.valtype = 'au16l';
                 node.ioid = '5';
             break;
+            case 'co2':
+                node.valtype = 'au16l';
+                node.ioid = '7';
+            break;
             case 'temp':
                 node.valtype = 't';
                 node.ioid = '1';

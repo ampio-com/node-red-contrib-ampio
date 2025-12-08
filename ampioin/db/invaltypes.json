@@ -14,6 +14,7 @@
         "iaq": "Indoor Air Quality index [IAQ]",
         "rs": "Heating/Cooling zone set temperature",
         "temp": "Temperature [*C]",
+        "co2": "CO2 concentration [ppm]",
         "au": "Analog 8bit value",
         "au16": "Analog 16 bit value",
         "au32": "Analog 32 bit value",
